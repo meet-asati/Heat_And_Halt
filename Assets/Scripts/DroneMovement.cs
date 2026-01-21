@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+// Automatically adds a CharacterController to the drone
+[RequireComponent(typeof(CharacterController))]
 public class DroneMovement : MonoBehaviour
 {
     [Header("References")]
@@ -8,9 +10,8 @@ public class DroneMovement : MonoBehaviour
 
     [Header("Freeze Beam Settings")]
     [SerializeField] float maxBeamEnergy = 100f;
-    [Tooltip("Time in seconds to fully recharge the beam from empty")]
+    [Tooltip("Time in seconds to fully recharge the beam")]
     [SerializeField] float rechargeDuration = 5f;
-    
     private float currentBeamEnergy;
 
     [Header("Position Settings")]
@@ -30,35 +31,37 @@ public class DroneMovement : MonoBehaviour
     private Vector3 currentVelocity;
     private float offsetX;
     private float offsetY;
+    
+    // Reference to the collision component
+    private CharacterController droneController;
 
     void Start()
     {
+        // Get the CharacterController component
+        droneController = GetComponent<CharacterController>();
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         
+        // Initialize position to start near the robot
         if (robot != null)
         {
+             // We disable the controller momentarily to teleport it to the start position
+             droneController.enabled = false;
              transform.position = robot.TransformPoint(baseOffset);
+             droneController.enabled = true;
         }
-        
-        // Start with empty energy (or change to maxBeamEnergy if you want it full at start)
+
         currentBeamEnergy = 0f;
     }
 
-    void Update() 
+    void Update()
     {
-        // --- Freeze Beam Logic ---
-        // Calculate how much energy to add per second to match duration
-        // Formula: Rate = Max / Time
+        // --- 1. Freeze Beam Logic (Recharge) ---
         float rechargeRate = maxBeamEnergy / rechargeDuration;
-        
-        // Recharge over time
         currentBeamEnergy += rechargeRate * Time.deltaTime;
-        
-        // Clamp energy
         currentBeamEnergy = Mathf.Clamp(currentBeamEnergy, 0, maxBeamEnergy);
 
-        // UPDATE UI
         if (HUDManager.Instance != null)
         {
             HUDManager.Instance.UpdateFreezeBar(currentBeamEnergy, maxBeamEnergy);
@@ -69,7 +72,7 @@ public class DroneMovement : MonoBehaviour
     {
         if (robot == null || Mouse.current == null) return;
 
-        // --- Existing Movement Logic ---
+        // --- 2. Calculate Target Position ---
         Vector2 mouseDelta = Mouse.current.delta.ReadValue();
 
         offsetX += mouseDelta.x * sensitivityX * Time.deltaTime;
@@ -81,9 +84,18 @@ public class DroneMovement : MonoBehaviour
         Vector3 targetLocalPos = baseOffset + new Vector3(offsetX, offsetY, 0);
         Vector3 targetWorldPos = robot.TransformPoint(targetLocalPos);
 
-        transform.position = Vector3.SmoothDamp(transform.position, targetWorldPos, ref currentVelocity, smoothTime);
+        // --- 3. Move with Collision (The Fix) ---
+        // Instead of setting position directly, we calculate the next step using SmoothDamp
+        Vector3 nextPosition = Vector3.SmoothDamp(transform.position, targetWorldPos, ref currentVelocity, smoothTime);
+        
+        // Calculate the difference (delta) between where we are and where we want to be
+        Vector3 movementDelta = nextPosition - transform.position;
 
-        Quaternion targetRot = robot.rotation * Quaternion.Euler(0,180,0);
+        // Use Move() so the CharacterController handles wall collisions automatically
+        droneController.Move(movementDelta);
+
+        // --- 4. Handle Rotation ---
+        Quaternion targetRot = robot.rotation * Quaternion.Euler(0, 180, 0);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 10f);
     }
 }

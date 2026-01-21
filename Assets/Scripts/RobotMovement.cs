@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+// This line ensures Unity automatically adds a CharacterController if one is missing
+[RequireComponent(typeof(CharacterController))]
 public class RobotMovement : MonoBehaviour
 {
     [Header("Movement Settings")]
@@ -8,26 +10,26 @@ public class RobotMovement : MonoBehaviour
     [SerializeField] float runSpeed = 10f;
     [SerializeField] float reverseSpeed = 3f;
     [SerializeField] float turnSpeed = 120f;
+    [SerializeField] float gravity = -9.81f; // Added Gravity so robot stays on floor
 
     [Header("Heat Settings")]
     [SerializeField] float maxHeat = 100f;
-    [Tooltip("Heat added per second while walking")]
     [SerializeField] float walkHeatRate = 5f;
-    [Tooltip("Heat added per second while sprinting")]
     [SerializeField] float sprintHeatRate = 15f; 
-    
-    // Tracks current heat
     public float CurrentHeat { get; private set; } 
 
     [Header("Animation Settings")]
     [SerializeField] float dampTime = 0.1f;
 
     private Animator robotAnimator;
+    private CharacterController characterController; // Reference to the new component
+    private Vector3 verticalVelocity; // To store falling speed
 
     void Start()
     {
         robotAnimator = GetComponent<Animator>();
-        CurrentHeat = 0f; // Start with 0 heat
+        characterController = GetComponent<CharacterController>(); // Get the component
+        CurrentHeat = 0f;
     }
 
     void Update()
@@ -43,7 +45,7 @@ public class RobotMovement : MonoBehaviour
         if (Keyboard.current.aKey.isPressed) turnInput -= 1f;
         if (Keyboard.current.dKey.isPressed) turnInput += 1f;
 
-        // --- 2. Handle Rotation ---
+        // --- 2. Handle Rotation (Stays the same) ---
         if (turnInput != 0)
         {
             float rotationAmount = turnInput * turnSpeed * Time.deltaTime;
@@ -52,30 +54,24 @@ public class RobotMovement : MonoBehaviour
 
         // --- 3. Handle Movement & Heat ---
         bool isSprinting = (moveInput > 0) && Keyboard.current.leftShiftKey.isPressed;
-        
         float currentSpeed = 0f;
         float animValue = 0f;
 
-        // Logic: Calculate Heat Generation based on movement
+        // Heat Logic
         if (moveInput != 0)
         {
-            // Determine heat rate: Higher for sprint, lower for walk/reverse
             float heatToAdd = isSprinting ? sprintHeatRate : walkHeatRate;
-            
-            // Add heat over time
             CurrentHeat += heatToAdd * Time.deltaTime;
         }
-
-        // Clamp Heat so it doesn't exceed Max
         CurrentHeat = Mathf.Clamp(CurrentHeat, 0, maxHeat);
 
-        // UPDATE UI: Send data to HUDManager
+        // Update UI
         if (HUDManager.Instance != null)
         {
             HUDManager.Instance.UpdateHeatBar(CurrentHeat, maxHeat);
         }
 
-        // -- Existing Movement Logic --
+        // Speed Logic
         if (moveInput > 0) 
         {
             if (isSprinting)
@@ -95,23 +91,35 @@ public class RobotMovement : MonoBehaviour
             animValue = -0.5f; 
         }
 
+        // --- 4. Apply Movement (UPDATED) ---
+        Vector3 move = Vector3.zero;
+        
         if (moveInput != 0)
         {
-            Vector3 moveDirection = transform.forward * moveInput * currentSpeed * Time.deltaTime;
-            transform.position += moveDirection;
+            // Calculate forward/backward direction relative to robot's rotation
+            move = transform.forward * moveInput * currentSpeed;
         }
 
-        // --- 4. Update Animator ---
+        // Apply Gravity (CharacterController doesn't have built-in gravity)
+        if (characterController.isGrounded && verticalVelocity.y < 0)
+        {
+            verticalVelocity.y = -2f; // Small force to keep stick to ground
+        }
+        verticalVelocity.y += gravity * Time.deltaTime;
+
+        // COMBINE movement and gravity
+        // Move() handles the collisions automatically!
+        characterController.Move((move + verticalVelocity) * Time.deltaTime);
+
+
+        // --- 5. Update Animator ---
         if(robotAnimator != null)
             robotAnimator.SetFloat("Speed", Mathf.Abs(animValue), dampTime, Time.deltaTime);
     }
 
-    // Call this from Drone's freeze beam to cool down
     public void ApplyCooling(float coolingAmount)
     {
         CurrentHeat -= coolingAmount;
         CurrentHeat = Mathf.Clamp(CurrentHeat, 0, maxHeat);
     }
 }
-
-
