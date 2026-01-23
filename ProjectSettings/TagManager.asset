@@ -44,12 +44,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Players
-    uniqueID: 2103832503
-    locked: 0
-  - name: Materials
-    uniqueID: 2234272157
-    locked: 0
   m_RenderingLayers:
   - Default
   - Light Layer 1
