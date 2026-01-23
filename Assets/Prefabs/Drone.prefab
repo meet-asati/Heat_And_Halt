@@ -10,11 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100000, guid: 7ef5a93e089a2b841891487c5d6e5d28, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 7ef5a93e089a2b841891487c5d6e5d28, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: 7ef5a93e089a2b841891487c5d6e5d28, type: 3}
       propertyPath: m_Name
@@ -22,7 +22,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: 7ef5a93e089a2b841891487c5d6e5d28, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: 7ef5a93e089a2b841891487c5d6e5d28, type: 3}
       propertyPath: m_TagString
@@ -42,7 +42,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 7ef5a93e089a2b841891487c5d6e5d28, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 11.88
+      value: 14.3
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 7ef5a93e089a2b841891487c5d6e5d28, type: 3}
       propertyPath: m_LocalPosition.y
@@ -119,6 +119,8 @@ MonoBehaviour:
   robot: {fileID: 0}
   maxBeamEnergy: 100
   rechargeDuration: 5
+  beamDepletionRate: 20
+  coolingPower: 25
   baseOffset: {x: 1.15, y: 0.15, z: 0}
   sensitivityX: 0.5
   sensitivityY: 0.5
