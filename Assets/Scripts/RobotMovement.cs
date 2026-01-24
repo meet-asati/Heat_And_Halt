@@ -30,6 +30,11 @@ public class RobotMovement : MonoBehaviour
     public float attackDuration = 1.0f; // Adjust this in Inspector to match your animation
     private bool isAttacking = false;
 
+    [Header("Combat & Heat")]
+    public float freezeBeamRange = 20f;
+    public LayerMask enemyLayer; // Assign the "Enemy" layer in Inspector
+    public Transform firePoint;  // Create an empty GameObject child on the Robot as the "Gun"
+
     void Start()
     {
         robotAnimator = GetComponent<Animator>();
@@ -56,14 +61,14 @@ public class RobotMovement : MonoBehaviour
         }
 
 
-         if (Keyboard.current.eKey.wasPressedThisFrame && !isAttacking)
+        if (Keyboard.current.eKey.wasPressedThisFrame && !isAttacking)
         {
             float heatThreshold = maxHeat * 0.5f;
 
             if (CurrentHeat > heatThreshold)
             {
-                 // Start the timing sequence routine
-                 StartCoroutine(PerformAttack());
+                // Start the timing sequence routine
+                StartCoroutine(PerformAttack());
             }
             else
             {
@@ -74,9 +79,9 @@ public class RobotMovement : MonoBehaviour
         // --- 2. Handle Rotation ---
         if (turnInput != 0)
         {
-             // ... existing rotation code ...
-             float rotationAmount = turnInput * turnSpeed * Time.deltaTime;
-             transform.Rotate(0, rotationAmount, 0);
+            // ... existing rotation code ...
+            float rotationAmount = turnInput * turnSpeed * Time.deltaTime;
+            transform.Rotate(0, rotationAmount, 0);
         }
 
         // --- 2. Handle Rotation (Stays the same) ---
@@ -156,6 +161,11 @@ public class RobotMovement : MonoBehaviour
         // --- 5. Update Animator ---
         if (robotAnimator != null)
             robotAnimator.SetFloat("Speed", Mathf.Abs(animValue), dampTime, Time.deltaTime);
+
+        if (Mouse.current.rightButton.wasPressedThisFrame)
+        {
+            FireFreezeBeam();
+        }
     }
 
     public void ApplyCooling(float coolingAmount)
@@ -164,18 +174,92 @@ public class RobotMovement : MonoBehaviour
         CurrentHeat = Mathf.Clamp(CurrentHeat, 0, maxHeat);
     }
 
-      System.Collections.IEnumerator PerformAttack()
+    System.Collections.IEnumerator PerformAttack()
     {
-        isAttacking = true;  // 1. Lock movement
-        
-        robotAnimator.SetTrigger("Fight"); // 2. Play Animation
-        Debug.Log("Attack Started - Movement Locked");
+        isAttacking = true;
+        robotAnimator.SetTrigger("Fight");
 
-        // 3. Wait for the animation to finish
-        yield return new WaitForSeconds(attackDuration);
+        // Wait for the punch animation to extend (e.g., 0.3s)
+        yield return new WaitForSeconds(0.3f);
 
-        isAttacking = false; // 4. Unlock movement
-        Debug.Log("Attack Finished - Movement Restored");
+        // --- LOGIC FIX: Hitbox Adjustment ---
+        // define the center of our search (Feet of the robot)
+        Vector3 attackCenter = transform.position;
+
+        // Radius: Increased to 3.0f to ensure we reach the ground even if standing tall
+        float attackRadius = 3.0f;
+
+        // Detect enemies in the sphere
+        Collider[] hitEnemies = Physics.OverlapSphere(attackCenter, attackRadius, enemyLayer);
+
+        // Debug: See how many enemies we found
+        Debug.Log($"Smash! Found {hitEnemies.Length} enemies in range.");
+
+        foreach (Collider enemy in hitEnemies)
+        {
+            // Try to get the Drone script from the object or its parent
+            DroneAI drone = enemy.GetComponent<DroneAI>();
+            if (drone == null) drone = enemy.GetComponentInParent<DroneAI>();
+
+            // Check if we found a drone AND it is frozen
+            if (drone != null)
+            {
+                if (drone.IsFrozen)
+                {
+                    drone.SmashDrone();
+                    Debug.Log("Confirmed: Frozen Drone Destroyed.");
+                }
+                else
+                {
+                    Debug.Log("Hit a drone, but it wasn't frozen yet!");
+                }
+            }
+        }
+        // -----------------------------------
+
+        yield return new WaitForSeconds(attackDuration - 0.3f);
+        isAttacking = false;
     }
 
+    public void IncreaseHeat(float amount)
+    {
+        CurrentHeat += amount;
+        if (CurrentHeat > maxHeat) CurrentHeat = maxHeat;
+        Debug.Log($"Heat Increased! Current: {CurrentHeat}");
+    }
+
+    void FireFreezeBeam()
+    {
+        // Debug: Draw a red line in the Scene view to show where you are shooting
+        Debug.DrawRay(firePoint.position, firePoint.forward * freezeBeamRange, Color.red, 1.0f);
+
+        RaycastHit hit;
+
+        // logic: "Shoot from FirePoint, Forward direction, Store hit info, Max Distance, ONLY hit 'enemyLayer'"
+        if (Physics.Raycast(firePoint.position, firePoint.forward, out hit, freezeBeamRange, enemyLayer))
+        {
+            Debug.Log("Raycast hit: " + hit.collider.name); // See what we hit in Console!
+
+            // Attempt to find the DroneAI script on the object we hit OR its parent
+            DroneAI drone = hit.collider.GetComponentInParent<DroneAI>();
+
+            if (drone != null)
+            {
+                drone.FreezeDrone();
+                Debug.Log("Target Frozen!");
+            }
+        }
+        else
+        {
+            Debug.Log("Missed! (Make sure the Enemy is on the correct Layer)");
+        }
+    }
+
+    // Draw the attack range in the Editor so you can see it
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        // This matches the radius in PerformAttack
+        Gizmos.DrawWireSphere(transform.position, 3.0f);
+    }
 }
