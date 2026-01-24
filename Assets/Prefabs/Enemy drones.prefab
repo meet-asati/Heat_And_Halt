@@ -350,6 +350,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ce4d4d283a29d114d9737c80bb6712a0, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 1058537776530174744, guid: ce4d4d283a29d114d9737c80bb6712a0, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -437,10 +441,10 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
+  m_IsKinematic: 1
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!65 &1153652823991836345
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -460,8 +464,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.0059379, y: 0.20530237, z: 0.68462324}
-  m_Center: {x: -0.004565017, y: 0.030369267, z: -0.157694}
+  m_Size: {x: 1.2143854, y: 0.36251858, z: 0.83676404}
+  m_Center: {x: 0.021617698, y: 0.028613418, z: -0.09338671}
 --- !u!114 &4803152473607383218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -474,11 +478,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cc79478e23704147b6842936528618e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DroneAI
-  moveSpeed: 6
-  attackRange: 4
-  heatDamage: 5
-  hoverHeight: 2
+  currentState: 0
   IsFrozen: 0
+  flySpeed: 10
+  diveSpeed: 20
+  hoverHeight: 6
+  attackHeight: 12
+  hoverTime: 2
+  attackTime: 1
+  heatDamage: 10
+  explosionPrefab: {fileID: 0}
 --- !u!4 &8801028441053483579 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ce4d4d283a29d114d9737c80bb6712a0, type: 3}

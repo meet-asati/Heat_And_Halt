@@ -35,6 +35,9 @@ public class RobotMovement : MonoBehaviour
     public LayerMask enemyLayer; // Assign the "Enemy" layer in Inspector
     public Transform firePoint;  // Create an empty GameObject child on the Robot as the "Gun"
 
+    private bool isDead = false;
+    public GameObject explosionPrefab;
+
     void Start()
     {
         robotAnimator = GetComponent<Animator>();
@@ -44,6 +47,11 @@ public class RobotMovement : MonoBehaviour
 
     void Update()
     {
+        if (isDead) return;
+        if (CurrentHeat >= maxHeat)
+        {
+            Die();
+        }
         isAttacking = false;
         if (Keyboard.current == null) return;
 
@@ -162,10 +170,6 @@ public class RobotMovement : MonoBehaviour
         if (robotAnimator != null)
             robotAnimator.SetFloat("Speed", Mathf.Abs(animValue), dampTime, Time.deltaTime);
 
-        if (Mouse.current.rightButton.wasPressedThisFrame)
-        {
-            FireFreezeBeam();
-        }
     }
 
     public void ApplyCooling(float coolingAmount)
@@ -187,10 +191,11 @@ public class RobotMovement : MonoBehaviour
         Vector3 attackCenter = transform.position;
 
         // Radius: Increased to 3.0f to ensure we reach the ground even if standing tall
-        float attackRadius = 3.0f;
+        float attackRadius = 10.0f;
 
         // Detect enemies in the sphere
-        Collider[] hitEnemies = Physics.OverlapSphere(attackCenter, attackRadius, enemyLayer);
+        Vector3 floorCenter = transform.position + Vector3.down * 0.5f;
+        Collider[] hitEnemies = Physics.OverlapSphere(floorCenter, attackRadius, enemyLayer);
 
         // Debug: See how many enemies we found
         Debug.Log($"Smash! Found {hitEnemies.Length} enemies in range.");
@@ -228,38 +233,36 @@ public class RobotMovement : MonoBehaviour
         Debug.Log($"Heat Increased! Current: {CurrentHeat}");
     }
 
-    void FireFreezeBeam()
-    {
-        // Debug: Draw a red line in the Scene view to show where you are shooting
-        Debug.DrawRay(firePoint.position, firePoint.forward * freezeBeamRange, Color.red, 1.0f);
-
-        RaycastHit hit;
-
-        // logic: "Shoot from FirePoint, Forward direction, Store hit info, Max Distance, ONLY hit 'enemyLayer'"
-        if (Physics.Raycast(firePoint.position, firePoint.forward, out hit, freezeBeamRange, enemyLayer))
-        {
-            Debug.Log("Raycast hit: " + hit.collider.name); // See what we hit in Console!
-
-            // Attempt to find the DroneAI script on the object we hit OR its parent
-            DroneAI drone = hit.collider.GetComponentInParent<DroneAI>();
-
-            if (drone != null)
-            {
-                drone.FreezeDrone();
-                Debug.Log("Target Frozen!");
-            }
-        }
-        else
-        {
-            Debug.Log("Missed! (Make sure the Enemy is on the correct Layer)");
-        }
-    }
-
     // Draw the attack range in the Editor so you can see it
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         // This matches the radius in PerformAttack
         Gizmos.DrawWireSphere(transform.position, 3.0f);
+    }
+
+    void Die()
+    {
+        if (isDead) return; // Prevent double dying
+        isDead = true;
+
+        Debug.Log("Meltdown Triggered!");
+
+        // 1. Visuals: Spawn Explosion
+        if (explosionPrefab != null) 
+        {
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        }
+
+        // 2. Disable the Robot Mesh so it looks like it was destroyed
+        // (This finds the visual model inside the robot and hides it)
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        foreach (Renderer r in renderers) r.enabled = false;
+
+        // 3. Call the Restart Logic
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.TriggerMeltdown();
+        }
     }
 }

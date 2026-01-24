@@ -8,7 +8,12 @@ public class DroneMovement : MonoBehaviour
     [SerializeField] Transform robot;
     private RobotMovement robotMovement; // REFERENCE TO ROBOT SCRIPT
 
-    [Header("Freeze Beam Settings")]
+    [Header("Freeze Beam & Combat")] // --- NEW SECTION ---
+    public LineRenderer laserLine;       // Drag your Line Renderer here
+    public LayerMask enemyLayer;         // Set to "Enemy" layer
+    public float freezeRange = 100f;     // Distance of the beam
+
+    [Header("Energy Settings")]
     [SerializeField] float maxBeamEnergy = 100f;
     [SerializeField] float rechargeDuration = 5f;
     [SerializeField] float beamDepletionRate = 20f; // Energy cost per second
@@ -23,7 +28,7 @@ public class DroneMovement : MonoBehaviour
     [SerializeField] float sensitivityY = 0.5f;
 
     [Header("Boundaries")]
-    [SerializeField] float horizontalLimit = 0.5f; 
+    [SerializeField] float horizontalLimit = 0.5f;
     [SerializeField] float verticalLimit = 0.8f;
 
     [Header("Smoothing")]
@@ -42,19 +47,22 @@ public class DroneMovement : MonoBehaviour
         droneController = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        
+
         // Initialize position
         if (robot != null)
         {
-             // GET THE ROBOT SCRIPT REFERENCE HERE
-             robotMovement = robot.GetComponent<RobotMovement>();
+            // GET THE ROBOT SCRIPT REFERENCE HERE
+            robotMovement = robot.GetComponent<RobotMovement>();
 
-             droneController.enabled = false;
-             transform.position = robot.TransformPoint(baseOffset);
-             droneController.enabled = true;
+            droneController.enabled = false;
+            transform.position = robot.TransformPoint(baseOffset);
+            droneController.enabled = true;
         }
 
-        currentBeamEnergy = 0f; // Start empty or full depending on preference (usually 0 to recharge)
+        currentBeamEnergy = 0f; // Start empty or full depending on preference
+
+        // --- NEW: Turn off laser at start ---
+        if (laserLine != null) laserLine.enabled = false;
     }
 
     void Update()
@@ -62,27 +70,38 @@ public class DroneMovement : MonoBehaviour
         if (Mouse.current == null) return;
 
         // --- 1. Handle Input States ---
-        bool isFiring = Mouse.current.leftButton.isPressed;
-        isAiming = Mouse.current.rightButton.isPressed;
+        bool isCooling = Mouse.current.leftButton.isPressed; // LMB: Cool Robot
+        bool isFreezing = Mouse.current.rightButton.isPressed; // RMB: Freeze Enemy & Aim
 
-        // --- 2. Cooling Logic (LMB) ---
-        // Only cool if button pressed AND we have energy
-        if (isFiring && currentBeamEnergy > 0)
+        // Set aiming state for movement smoothing (Existing mechanic)
+        isAiming = isFreezing;
+
+        // --- 2. Action Logic ---
+        // Strict Check: Must have energy > 0 to start OR continue firing
+        if ((isCooling || isFreezing) && currentBeamEnergy > 0)
         {
-            // Drain the drone's energy
+            // Drain energy
             currentBeamEnergy -= beamDepletionRate * Time.deltaTime;
 
-            // Apply cooling to the robot
-            if (robotMovement != null)
+            if (isCooling)
             {
-                robotMovement.ApplyCooling(coolingPower * Time.deltaTime);
+                if (robotMovement != null) robotMovement.ApplyCooling(coolingPower * Time.deltaTime);
+                if (laserLine != null) laserLine.enabled = false; // Priority to cooling, no laser
+            }
+            else if (isFreezing)
+            {
+                FireFreezeBeam();
             }
         }
         else
         {
-            // Recharge Logic (Only if not firing)
+            // --- RECHARGE STATE ---
+            // If we are here, we either released the button OR ran out of energy
             float rechargeRate = maxBeamEnergy / rechargeDuration;
             currentBeamEnergy += rechargeRate * Time.deltaTime;
+
+            // CUT THE LASER IMMEDIATELY
+            if (laserLine != null) laserLine.enabled = false;
         }
 
         // Clamp Energy
@@ -95,17 +114,51 @@ public class DroneMovement : MonoBehaviour
         }
     }
 
+    // --- NEW: SHOOTING LOGIC ---
+    void FireFreezeBeam()
+    {
+        // 1. AIM: Raycast from the Camera Center (Player's Eye)
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        RaycastHit hit;
+
+        // Default end point if we miss (shoot into sky)
+        Vector3 laserEndPoint = ray.GetPoint(freezeRange);
+
+        // 2. DETECT: Did the Camera see an enemy?
+        if (Physics.Raycast(ray, out hit, freezeRange, enemyLayer))
+        {
+            laserEndPoint = hit.point; // Update target to actual hit
+
+            // Try to find the Enemy Drone script
+            DroneAI enemyDrone = hit.collider.GetComponent<DroneAI>();
+            if (enemyDrone == null) enemyDrone = hit.collider.GetComponentInParent<DroneAI>();
+
+            if (enemyDrone != null)
+            {
+                enemyDrone.FreezeDrone(); // Call the Freeze function on the enemy
+            }
+        }
+
+        // 3. VISUALS: Draw line from COMPANION DRONE to TARGET
+        if (laserLine != null)
+        {
+            laserLine.enabled = true;
+            laserLine.SetPosition(0, transform.position); // Start at Drone
+            laserLine.SetPosition(1, laserEndPoint);      // End at Enemy/Wall
+        }
+    }
+
     void LateUpdate()
     {
         if (robot == null || Mouse.current == null) return;
 
         // --- 3. Aim Mode (RMB) ---
-        // When aiming, we reduce sensitivity for precision (Placeholder for full aim mechanic)
+        // When aiming, we reduce sensitivity for precision
         float currentSensX = isAiming ? sensitivityX * 0.5f : sensitivityX;
         float currentSensY = isAiming ? sensitivityY * 0.5f : sensitivityY;
 
         Vector2 mouseDelta = Mouse.current.delta.ReadValue();
-        
+
         offsetX += mouseDelta.x * currentSensX * Time.deltaTime;
         offsetY += mouseDelta.y * currentSensY * Time.deltaTime;
 

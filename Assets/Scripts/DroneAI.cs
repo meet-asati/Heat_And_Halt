@@ -2,18 +2,26 @@ using UnityEngine;
 
 public class DroneAI : MonoBehaviour
 {
-    [Header("Settings")]
-    public float moveSpeed = 3.0f;
-    public float attackRange = 4.0f; // Updated to match previous fix
-    public float heatDamage = 5.0f;
-    public float hoverHeight = 2.0f; // Updated to match previous fix
+    public enum DroneState { Hovering, Diving, Attacking, Ascending }
 
-    [Header("Flying Animation")]
-    public float bobbingSpeed = 2.0f; // How fast it bobs up/down
-    public float bobbingAmount = 0.5f; // How far it moves up/down
-
-    [Header("Status")]
+    [Header("State")]
+    public DroneState currentState = DroneState.Hovering;
     public bool IsFrozen = false;
+
+    [Header("Movement Settings")]
+    public float flySpeed = 10.0f;       // Increased from 5
+    public float diveSpeed = 20.0f;      // Increased from 12  
+    public float hoverHeight = 6.0f;    // High wait position
+    public float attackHeight = 1.5f;   // Attack position (Chest/Head)
+
+    [Header("Timing")]
+    public float hoverTime = 2.0f;
+    public float attackTime = 1.0f;
+    private float timer;
+
+    [Header("Combat")]
+    public float heatDamage = 10.0f;
+    public GameObject explosionPrefab;
 
     private Transform player;
     private RobotMovement playerScript;
@@ -21,7 +29,6 @@ public class DroneAI : MonoBehaviour
 
     void Start()
     {
-        // 1. Find Player safely
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
         {
@@ -29,92 +36,123 @@ public class DroneAI : MonoBehaviour
             playerScript = player.GetComponent<RobotMovement>();
         }
 
-        // 2. Setup Physics
         rb = GetComponent<Rigidbody>();
         if (rb != null)
         {
             rb.useGravity = false;
-            rb.linearDamping = 1f; // Unity 6 (formerly 'drag')
-            rb.angularDamping = 1f; // Unity 6 (formerly 'angularDrag')
-            
-            // Important: Keep Kinematic OFF so it detects collisions, 
-            // but Gravity OFF so it flies.
-            rb.isKinematic = false; 
+            rb.isKinematic = true;
         }
+
+        timer = hoverTime;
     }
 
     void Update()
     {
-        if (IsFrozen || player == null || playerScript == null) return;
+        if (IsFrozen || player == null) return;
 
-        float distance = Vector3.Distance(transform.position, player.position);
+        // Calculate the specific point we want to look at (Chest/Head)
+        // We use the same height as our attack target
+        Vector3 lookTarget = player.position + Vector3.up * attackHeight;
 
-        // --- 1. Calculate Target Position ---
-        Vector3 targetPosition = player.position;
-        
-        // Add Hover Height + Sine Wave Bobbing for "Flying" effect
-        float newY = hoverHeight + (Mathf.Sin(Time.time * bobbingSpeed) * bobbingAmount);
-        targetPosition.y += newY; 
-
-        // --- 2. Move Drone ---
-        if (distance > attackRange)
+        switch (currentState)
         {
-            // Move towards the player's calculated hover spot
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-            transform.LookAt(player);
-        }
-        else 
-        {
-            // Attack: Stay in place (bobbing) and heat up player
-            // We still update Y to keep bobbing, but don't move X/Z closer
-            Vector3 currentPos = transform.position;
-            currentPos.y = Mathf.MoveTowards(currentPos.y, targetPosition.y, moveSpeed * Time.deltaTime);
-            transform.position = currentPos;
-            
-            transform.LookAt(player);
-            playerScript.IncreaseHeat(heatDamage * Time.deltaTime);
+            case DroneState.Hovering:
+                HandleHover(lookTarget);
+                break;
+            case DroneState.Diving:
+                HandleDive(lookTarget);
+                break;
+            case DroneState.Attacking:
+                HandleAttack(lookTarget);
+                break;
+            case DroneState.Ascending:
+                HandleAscend(lookTarget);
+                break;
         }
     }
 
-    // --- NEW: Floor Recovery Logic ---
-    // If the drone accidentally hits the floor/wall while NOT frozen, fly up!
-    void OnCollisionStay(Collision collision)
+    void HandleHover(Vector3 lookSpot)
     {
-        // If we are alive (not frozen) and hitting something (the floor)
-        if (!IsFrozen)
+        Vector3 highPoint = player.position + Vector3.up * hoverHeight;
+
+        transform.position = Vector3.MoveTowards(transform.position, highPoint, flySpeed * Time.deltaTime);
+
+        // FIX: Look at the player's chest, not feet
+        transform.LookAt(lookSpot);
+
+        timer -= Time.deltaTime;
+        if (timer <= 0) currentState = DroneState.Diving;
+    }
+
+    void HandleDive(Vector3 lookSpot)
+    {
+        Vector3 attackPoint = player.position + Vector3.up * attackHeight;
+
+        transform.position = Vector3.MoveTowards(transform.position, attackPoint, diveSpeed * Time.deltaTime);
+        transform.LookAt(lookSpot); // Keep eyes on the chest
+
+        float dist = Vector3.Distance(transform.position, attackPoint);
+        if (dist < 0.5f)
         {
-            // Force the drone upwards immediately
-            Vector3 recoveryPos = transform.position;
-            recoveryPos.y += 2.0f * Time.deltaTime; // Lift speed
-            transform.position = recoveryPos;
+            currentState = DroneState.Attacking;
+            timer = attackTime;
+        }
+    }
+
+    void HandleAttack(Vector3 lookSpot)
+    {
+        Vector3 attackPoint = player.position + Vector3.up * attackHeight;
+
+        transform.position = Vector3.MoveTowards(transform.position, attackPoint, flySpeed * Time.deltaTime);
+        transform.LookAt(lookSpot); // Ensure gun points at chest
+
+        if (playerScript != null) playerScript.IncreaseHeat(heatDamage * Time.deltaTime);
+
+        timer -= Time.deltaTime;
+        if (timer <= 0) currentState = DroneState.Ascending;
+    }
+
+    void HandleAscend(Vector3 lookSpot)
+    {
+        Vector3 highPoint = player.position + Vector3.up * hoverHeight;
+
+        transform.position = Vector3.MoveTowards(transform.position, highPoint, flySpeed * Time.deltaTime);
+        transform.LookAt(lookSpot); // Still watching player while leaving
+
+        float dist = Vector3.Distance(transform.position, highPoint);
+        if (dist < 0.5f)
+        {
+            currentState = DroneState.Hovering;
+            timer = hoverTime;
         }
     }
 
     public void FreezeDrone()
     {
         if (IsFrozen) return;
-
         IsFrozen = true;
-        
+
         if (rb != null)
         {
-            rb.useGravity = true; // Turn ON gravity to fall
-            rb.linearDamping = 0.5f; // Reduce drag so it falls faster
+            rb.isKinematic = false;
+            rb.useGravity = true;
+            rb.constraints = RigidbodyConstraints.None;
+            // Add a little spin so it looks like a crash
+            rb.AddTorque(Random.insideUnitSphere * 10f, ForceMode.Impulse);
         }
-        
-        // Visual Change
-        Renderer droneRenderer = GetComponentInChildren<Renderer>();
-        if (droneRenderer != null)
-        {
-            droneRenderer.material.color = Color.cyan;
-        }
-        
-        Debug.Log("Drone Frozen! Falling to floor...");
+
+        Renderer r = GetComponentInChildren<Renderer>();
+        if (r != null) r.material.color = Color.cyan;
     }
 
     public void SmashDrone()
     {
-        Debug.Log("Drone Smashed!");
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.EnemyDefeated();
+        }
+
+        if (explosionPrefab != null) Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 }
