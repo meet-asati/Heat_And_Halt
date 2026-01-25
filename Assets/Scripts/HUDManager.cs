@@ -25,6 +25,10 @@ public class HUDManager : MonoBehaviour
     // Singleton instance for easy access
     public static HUDManager Instance;
 
+    [Header("Boss UI")]
+    public GameObject bossHealthContainer; // The Background Object (to show/hide)
+    public Image bossHealthFill;
+
     void Awake()
     {
         if (Instance == null) Instance = this;
@@ -68,6 +72,19 @@ public class HUDManager : MonoBehaviour
             {
                 freezeBarFill.color = normalFreezeColor;
             }
+        }
+    }
+
+    public void ShowBossHealth(bool show)
+    {
+        if (bossHealthContainer != null) bossHealthContainer.SetActive(show);
+    }
+
+    public void UpdateBossHealth(float currentHealth, float maxHealth)
+    {
+        if (bossHealthFill != null)
+        {
+            bossHealthFill.fillAmount = currentHealth / maxHealth;
         }
     }
 }

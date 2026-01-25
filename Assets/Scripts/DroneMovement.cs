@@ -6,41 +6,43 @@ public class DroneMovement : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] Transform robot;
-    private RobotMovement robotMovement; // REFERENCE TO ROBOT SCRIPT
+    private RobotMovement robotMovement;
 
-    [Header("Freeze Beam & Combat")] // --- NEW SECTION ---
-    public LineRenderer laserLine;       // Drag your Line Renderer here
-    public LayerMask enemyLayer;         // Set to "Enemy" layer
-    public float freezeRange = 100f;     // Distance of the beam
+    [Header("Combat & Aiming")]
+    public LineRenderer laserLine;
+    public LayerMask enemyLayer;
+    public float freezeRange = 100f;
+    public float beamRadius = 1.0f;
+    public Transform crosshairVisual;
 
     [Header("Energy Settings")]
     [SerializeField] float maxBeamEnergy = 100f;
     [SerializeField] float rechargeDuration = 5f;
-    [SerializeField] float beamDepletionRate = 20f; // Energy cost per second
-    [SerializeField] float coolingPower = 25f;      // How much heat triggers reduction per second
+    [SerializeField] float beamDepletionRate = 20f;
+    [SerializeField] float coolingPower = 25f;
     private float currentBeamEnergy;
 
     [Header("Position Settings")]
-    [SerializeField] Vector3 baseOffset = new Vector3(1.5f, 1.8f, 0f);
+    [SerializeField] Vector3 baseOffset = new Vector3(1.5f, 2.5f, 0f);
 
     [Header("Mouse Control")]
     [SerializeField] float sensitivityX = 0.5f;
     [SerializeField] float sensitivityY = 0.5f;
 
-    [Header("Boundaries")]
-    [SerializeField] float horizontalLimit = 0.5f;
-    [SerializeField] float verticalLimit = 0.8f;
+    [Header("Limits")]
+    [SerializeField] float bodyMoveLimitX = 0.5f; // Keeps body on right
+    [SerializeField] float bodyMoveLimitY = 1.0f;
+    [SerializeField] float aimLimitX = 5.0f;      // Allows aim to go left
+    [SerializeField] float aimLimitY = 4.0f;
+    [SerializeField] float aimDistance = 20f;
 
     [Header("Smoothing")]
     [SerializeField] float smoothTime = 0.1f;
 
     private Vector3 currentVelocity;
-    private float offsetX;
-    private float offsetY;
+    private float mouseX;
+    private float mouseY;
     private CharacterController droneController;
-
-    // AIMING STATE
-    private bool isAiming = false;
 
     void Start()
     {
@@ -48,133 +50,158 @@ public class DroneMovement : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        // Initialize position
         if (robot != null)
         {
-            // GET THE ROBOT SCRIPT REFERENCE HERE
             robotMovement = robot.GetComponent<RobotMovement>();
-
             droneController.enabled = false;
             transform.position = robot.TransformPoint(baseOffset);
             droneController.enabled = true;
         }
-
-        currentBeamEnergy = 0f; // Start empty or full depending on preference
-
-        // --- NEW: Turn off laser at start ---
         if (laserLine != null) laserLine.enabled = false;
     }
 
+    // 1. READ INPUT HERE
     void Update()
     {
-        if (Mouse.current == null) return;
+        if (Mouse.current == null || robot == null) return;
 
-        // --- 1. Handle Input States ---
-        bool isCooling = Mouse.current.leftButton.isPressed; // LMB: Cool Robot
-        bool isFreezing = Mouse.current.rightButton.isPressed; // RMB: Freeze Enemy & Aim
+        // Collect Mouse Input
+        Vector2 mouseDelta = Mouse.current.delta.ReadValue();
+        mouseX += mouseDelta.x * sensitivityX * Time.deltaTime;
+        mouseY += mouseDelta.y * sensitivityY * Time.deltaTime;
 
-        // Set aiming state for movement smoothing (Existing mechanic)
-        isAiming = isFreezing;
+        // Clamp Aim
+        mouseX = Mathf.Clamp(mouseX, -aimLimitX, aimLimitX);
+        mouseY = Mathf.Clamp(mouseY, -aimLimitY, aimLimitY);
 
-        // --- 2. Action Logic ---
-        // Strict Check: Must have energy > 0 to start OR continue firing
+        // Calculate Aim Target for visual crosshair updates
+        Vector3 aimLocalPos = new Vector3(mouseX, mouseY + 2.0f, aimDistance);
+        Vector3 aimWorldPos = robot.TransformPoint(aimLocalPos);
+
+        if (crosshairVisual != null) crosshairVisual.position = aimWorldPos;
+
+        // Combat Logic
+        HandleCombat(aimWorldPos);
+    }
+
+    // 2. MOVE DRONE HERE (Prevents Jitter)
+    void LateUpdate()
+    {
+        if (robot == null) return;
+
+        // 1. POSITION LOGIC (Keep aiming independent of body pos)
+        float droneX = Mathf.Clamp(mouseX, -bodyMoveLimitX, bodyMoveLimitX);
+        float droneY = Mathf.Clamp(mouseY, -bodyMoveLimitY, bodyMoveLimitY);
+        
+        Vector3 droneLocalPos = baseOffset + new Vector3(droneX, droneY, 0);
+        Vector3 droneWorldPos = robot.TransformPoint(droneLocalPos);
+
+        // Move Smoothly
+        Vector3 nextPosition = Vector3.SmoothDamp(transform.position, droneWorldPos, ref currentVelocity, smoothTime);
+        Vector3 movementDelta = nextPosition - transform.position;
+        droneController.Move(movementDelta);
+
+        // 2. ROTATION LOGIC (Turret Aiming + 180 Correction)
+        
+        // Recalculate aim target
+        Vector3 aimLocalPos = new Vector3(mouseX, mouseY + 2.0f, aimDistance);
+        Vector3 aimWorldPos = robot.TransformPoint(aimLocalPos);
+        
+        // A. Find the direction to the crosshair
+        Vector3 directionToTarget = aimWorldPos - transform.position;
+
+        // B. Calculate the rotation to look at that target
+        if (directionToTarget != Vector3.zero)
+        {
+            Quaternion lookRotation = Quaternion.LookRotation(directionToTarget);
+
+            // C. Apply your 180-degree offset HERE
+            // This tells Unity: "Look at the target, then spin 180 degrees so the face is correct"
+            Quaternion correctedRotation = lookRotation * Quaternion.Euler(0, 180, 0);
+
+            // D. Apply smoothly
+            transform.rotation = Quaternion.Slerp(transform.rotation, correctedRotation, Time.deltaTime * 10f);
+        }
+    }
+
+    void HandleCombat(Vector3 targetPoint)
+    {
+        bool isCooling = Mouse.current.leftButton.isPressed;
+        bool isFreezing = Mouse.current.rightButton.isPressed;
+
         if ((isCooling || isFreezing) && currentBeamEnergy > 0)
         {
-            // Drain energy
             currentBeamEnergy -= beamDepletionRate * Time.deltaTime;
 
             if (isCooling)
             {
                 if (robotMovement != null) robotMovement.ApplyCooling(coolingPower * Time.deltaTime);
-                if (laserLine != null) laserLine.enabled = false; // Priority to cooling, no laser
+                if (laserLine != null) laserLine.enabled = false;
             }
             else if (isFreezing)
             {
-                FireFreezeBeam();
+                FireFreezeBeam(targetPoint);
             }
         }
         else
         {
-            // --- RECHARGE STATE ---
-            // If we are here, we either released the button OR ran out of energy
-            float rechargeRate = maxBeamEnergy / rechargeDuration;
-            currentBeamEnergy += rechargeRate * Time.deltaTime;
-
-            // CUT THE LASER IMMEDIATELY
+            currentBeamEnergy += (maxBeamEnergy / rechargeDuration) * Time.deltaTime;
             if (laserLine != null) laserLine.enabled = false;
         }
-
-        // Clamp Energy
         currentBeamEnergy = Mathf.Clamp(currentBeamEnergy, 0, maxBeamEnergy);
 
-        // Update UI
         if (HUDManager.Instance != null)
-        {
             HUDManager.Instance.UpdateFreezeBar(currentBeamEnergy, maxBeamEnergy);
-        }
     }
 
-    // --- NEW: SHOOTING LOGIC ---
-    void FireFreezeBeam()
+    void FireFreezeBeam(Vector3 targetPoint)
     {
-        // 1. AIM: Raycast from the Camera Center (Player's Eye)
-        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        RaycastHit hit;
+        Vector3 startPos = transform.position;
+        Vector3 direction = (targetPoint - startPos).normalized;
+        Vector3 laserEndPoint = startPos + direction * freezeRange;
+        bool foundTarget = false;
 
-        // Default end point if we miss (shoot into sky)
-        Vector3 laserEndPoint = ray.GetPoint(freezeRange);
+        RaycastHit[] hits = Physics.SphereCastAll(startPos, beamRadius, direction, freezeRange, enemyLayer);
+        System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
 
-        // 2. DETECT: Did the Camera see an enemy?
-        if (Physics.Raycast(ray, out hit, freezeRange, enemyLayer))
+        foreach (RaycastHit hit in hits)
         {
-            laserEndPoint = hit.point; // Update target to actual hit
+            BossVent vent = hit.collider.GetComponent<BossVent>();
+            if (vent != null)
+            {
+                vent.TakeLaserDamage(50f * Time.deltaTime);
+                laserEndPoint = hit.point;
+                foundTarget = true;
+                if (laserLine != null) laserLine.startColor = Color.red;
+                break;
+            }
 
-            // Try to find the Enemy Drone script
+            BossAI boss = hit.collider.GetComponent<BossAI>();
+            if (boss != null && !foundTarget)
+            {
+                boss.FreezeBoss();
+                laserEndPoint = hit.point;
+                foundTarget = true;
+                if (laserLine != null) laserLine.startColor = Color.cyan;
+            }
+
             DroneAI enemyDrone = hit.collider.GetComponent<DroneAI>();
             if (enemyDrone == null) enemyDrone = hit.collider.GetComponentInParent<DroneAI>();
-
-            if (enemyDrone != null)
+            if (enemyDrone != null && !foundTarget)
             {
-                enemyDrone.FreezeDrone(); // Call the Freeze function on the enemy
+                enemyDrone.FreezeDrone();
+                laserEndPoint = hit.point;
+                foundTarget = true;
+                break;
             }
         }
 
-        // 3. VISUALS: Draw line from COMPANION DRONE to TARGET
         if (laserLine != null)
         {
             laserLine.enabled = true;
-            laserLine.SetPosition(0, transform.position); // Start at Drone
-            laserLine.SetPosition(1, laserEndPoint);      // End at Enemy/Wall
+            laserLine.SetPosition(0, startPos);
+            laserLine.SetPosition(1, laserEndPoint);
+            if (!foundTarget) laserLine.startColor = Color.cyan;
         }
-    }
-
-    void LateUpdate()
-    {
-        if (robot == null || Mouse.current == null) return;
-
-        // --- 3. Aim Mode (RMB) ---
-        // When aiming, we reduce sensitivity for precision
-        float currentSensX = isAiming ? sensitivityX * 0.5f : sensitivityX;
-        float currentSensY = isAiming ? sensitivityY * 0.5f : sensitivityY;
-
-        Vector2 mouseDelta = Mouse.current.delta.ReadValue();
-
-        offsetX += mouseDelta.x * currentSensX * Time.deltaTime;
-        offsetY += mouseDelta.y * currentSensY * Time.deltaTime;
-
-        offsetX = Mathf.Clamp(offsetX, -horizontalLimit, horizontalLimit);
-        offsetY = Mathf.Clamp(offsetY, -verticalLimit, verticalLimit);
-
-        Vector3 targetLocalPos = baseOffset + new Vector3(offsetX, offsetY, 0);
-        Vector3 targetWorldPos = robot.TransformPoint(targetLocalPos);
-
-        // Movement with Smoothing
-        Vector3 nextPosition = Vector3.SmoothDamp(transform.position, targetWorldPos, ref currentVelocity, smoothTime);
-        Vector3 movementDelta = nextPosition - transform.position;
-        droneController.Move(movementDelta);
-
-        // Rotation
-        Quaternion targetRot = robot.rotation * Quaternion.Euler(0, 180, 0);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 10f);
     }
 }

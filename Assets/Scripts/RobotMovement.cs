@@ -202,22 +202,20 @@ public class RobotMovement : MonoBehaviour
 
         foreach (Collider enemy in hitEnemies)
         {
-            // Try to get the Drone script from the object or its parent
+            // 1. Check for Drone (Existing)
             DroneAI drone = enemy.GetComponent<DroneAI>();
             if (drone == null) drone = enemy.GetComponentInParent<DroneAI>();
 
-            // Check if we found a drone AND it is frozen
-            if (drone != null)
+            if (drone != null && drone.IsFrozen)
             {
-                if (drone.IsFrozen)
-                {
-                    drone.SmashDrone();
-                    Debug.Log("Confirmed: Frozen Drone Destroyed.");
-                }
-                else
-                {
-                    Debug.Log("Hit a drone, but it wasn't frozen yet!");
-                }
+                drone.SmashDrone();
+            }
+
+            // 2. NEW: Check for Boss (Thermal Shock)
+            BossAI boss = enemy.GetComponent<BossAI>();
+            if (boss != null)
+            {
+                boss.TakeThermalDamage();
             }
         }
         // -----------------------------------
@@ -249,7 +247,7 @@ public class RobotMovement : MonoBehaviour
         Debug.Log("Meltdown Triggered!");
 
         // 1. Visuals: Spawn Explosion
-        if (explosionPrefab != null) 
+        if (explosionPrefab != null)
         {
             Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         }
