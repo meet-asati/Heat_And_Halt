@@ -14,6 +14,7 @@ public class DroneMovement : MonoBehaviour
     public float freezeRange = 100f;
     public float beamRadius = 1.0f;
     public Transform crosshairVisual;
+    public Transform laserOrigin;
 
     [Header("Energy Settings")]
     [SerializeField] float maxBeamEnergy = 100f;
@@ -92,7 +93,7 @@ public class DroneMovement : MonoBehaviour
         // 1. POSITION LOGIC (Keep aiming independent of body pos)
         float droneX = Mathf.Clamp(mouseX, -bodyMoveLimitX, bodyMoveLimitX);
         float droneY = Mathf.Clamp(mouseY, -bodyMoveLimitY, bodyMoveLimitY);
-        
+
         Vector3 droneLocalPos = baseOffset + new Vector3(droneX, droneY, 0);
         Vector3 droneWorldPos = robot.TransformPoint(droneLocalPos);
 
@@ -102,11 +103,11 @@ public class DroneMovement : MonoBehaviour
         droneController.Move(movementDelta);
 
         // 2. ROTATION LOGIC (Turret Aiming + 180 Correction)
-        
+
         // Recalculate aim target
         Vector3 aimLocalPos = new Vector3(mouseX, mouseY + 2.0f, aimDistance);
         Vector3 aimWorldPos = robot.TransformPoint(aimLocalPos);
-        
+
         // A. Find the direction to the crosshair
         Vector3 directionToTarget = aimWorldPos - transform.position;
 
@@ -156,8 +157,11 @@ public class DroneMovement : MonoBehaviour
 
     void FireFreezeBeam(Vector3 targetPoint)
     {
-        Vector3 startPos = transform.position;
+        Vector3 startPos = laserOrigin.position;
+
+        // Calculate direction from that specific point to the target
         Vector3 direction = (targetPoint - startPos).normalized;
+
         Vector3 laserEndPoint = startPos + direction * freezeRange;
         bool foundTarget = false;
 
@@ -166,6 +170,7 @@ public class DroneMovement : MonoBehaviour
 
         foreach (RaycastHit hit in hits)
         {
+            // ... (keep existing hit logic for BossVent, BossAI, DroneAI) ...
             BossVent vent = hit.collider.GetComponent<BossVent>();
             if (vent != null)
             {
@@ -199,9 +204,13 @@ public class DroneMovement : MonoBehaviour
         if (laserLine != null)
         {
             laserLine.enabled = true;
+
+            // CHANGE 2: Laser starts at the new Fire Point
             laserLine.SetPosition(0, startPos);
             laserLine.SetPosition(1, laserEndPoint);
+
             if (!foundTarget) laserLine.startColor = Color.cyan;
+
         }
     }
 }
