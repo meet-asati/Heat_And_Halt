@@ -170,7 +170,16 @@ public class DroneMovement : MonoBehaviour
 
         foreach (RaycastHit hit in hits)
         {
-            // ... (keep existing hit logic for BossVent, BossAI, DroneAI) ...
+            DestroyableObject destObj = hit.collider.GetComponent<DestroyableObject>();
+            if (destObj != null)
+            {
+                destObj.FreezeObject();
+                laserEndPoint = hit.point;
+                foundTarget = true;
+                if (laserLine != null) laserLine.startColor = Color.cyan;
+                break; // Stop raycast here
+            }
+
             BossVent vent = hit.collider.GetComponent<BossVent>();
             if (vent != null)
             {

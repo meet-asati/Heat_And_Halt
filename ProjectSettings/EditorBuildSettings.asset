@@ -5,9 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/wwe.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Level 1 - Teaching Basic Controls.unity
+    guid: 7c66976ce55346c4894e2bbb57880026
+  - enabled: 1
+    path: Assets/Scenes/Level 2 - Enemy Drones Attack.unity
+    guid: 553a8a2450f55a0448ad61f2d3f485e7
+  - enabled: 1
+    path: Assets/Scenes/Level 3 - Robot Boss Fight.unity
+    guid: 3c2d463f588b8d245a1a24941a70a94e
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

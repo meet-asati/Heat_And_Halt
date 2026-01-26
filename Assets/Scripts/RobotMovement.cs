@@ -202,6 +202,13 @@ public class RobotMovement : MonoBehaviour
 
         foreach (Collider enemy in hitEnemies)
         {
+
+            DestroyableObject destObj = enemy.GetComponent<DestroyableObject>();
+            if (destObj != null)
+            {
+                destObj.SmashObject();
+            }
+
             // 1. Check for Drone (Existing)
             DroneAI drone = enemy.GetComponent<DroneAI>();
             if (drone == null) drone = enemy.GetComponentInParent<DroneAI>();
