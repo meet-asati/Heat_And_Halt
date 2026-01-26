@@ -6,11 +6,20 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Slide 1.unity
+    guid: 8e585b9a48fb85b48b2a91e5ee9ede2d
+  - enabled: 1
     path: Assets/Scenes/Level 1 - Teaching Basic Controls.unity
     guid: 7c66976ce55346c4894e2bbb57880026
   - enabled: 1
+    path: Assets/Scenes/Slide 2.unity
+    guid: 437a98dca6595ed489de12dbf0c73527
+  - enabled: 1
     path: Assets/Scenes/Level 2 - Enemy Drones Attack.unity
     guid: 553a8a2450f55a0448ad61f2d3f485e7
+  - enabled: 1
+    path: Assets/Scenes/Slide 3.unity
+    guid: 340715283d6774442b4fe9102f09f3bd
   - enabled: 1
     path: Assets/Scenes/Level 3 - Robot Boss Fight.unity
     guid: 3c2d463f588b8d245a1a24941a70a94e
