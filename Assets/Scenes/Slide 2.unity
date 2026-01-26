@@ -160,7 +160,7 @@ MonoBehaviour:
     unaware of how many more of these hunters are waiting for them in the shadows
     ahead."
   typingSpeed: 0.05
-  nextSceneName: 
+  overrideSceneName: 
   storyTextComponent: {fileID: 1081965741}
   continuePrompt: {fileID: 0}
 --- !u!4 &77455066
@@ -537,9 +537,9 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 2b4228b6059bacc4187095af84b853c7, type: 3}
+  m_Resource: {fileID: 8300000, guid: 03264a365c858494c93ee8d3e1efbf6b, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.1
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 1
   Mute: 0
