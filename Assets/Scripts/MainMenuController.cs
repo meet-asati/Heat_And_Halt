@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
@@ -10,6 +11,12 @@ public class MainMenuController : MonoBehaviour
     [Header("UI Panels")]
     public GameObject assetsPanel; // Drag your 'AssetsPanel' here
     public GameObject mainButtonsGroup; // Optional: Drag the parent of your 3 buttons here
+
+    void Start()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
 
     public void PlayGame()
     {

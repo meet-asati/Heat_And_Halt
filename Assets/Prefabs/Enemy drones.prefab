@@ -480,14 +480,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DroneAI
   currentState: 0
   IsFrozen: 0
-  flySpeed: 10
-  diveSpeed: 20
+  flySpeed: 15
+  diveSpeed: 25
   hoverHeight: 6
   attackHeight: 12
   hoverTime: 2
   attackTime: 1
-  heatDamage: 10
+  heatDamage: 20
   explosionPrefab: {fileID: 0}
+  startsActive: 1
 --- !u!4 &8801028441053483579 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ce4d4d283a29d114d9737c80bb6712a0, type: 3}

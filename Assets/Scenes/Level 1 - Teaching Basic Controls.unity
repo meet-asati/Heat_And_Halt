@@ -1807,11 +1807,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3470092910961130467, guid: 9f50fdb071f54674f8166b46f510ad84, type: 3}
   m_PrefabInstance: {fileID: 108149124}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &110574439 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3691659005178554142, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-  m_PrefabInstance: {fileID: 1721721881}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &130656196
 GameObject:
   m_ObjectHideFlags: 0
@@ -4181,22 +4176,37 @@ MonoBehaviour:
   message: 'OBSTACLE DETECTED.
 
 
-    DOOR LOCK MECHANISM: This door is powered by
-    local fuseboxes on the walls.
+    There are obstacles the path, destroy them to
+    move ahead.
 
 
     INSTRUCTION:
 
 
-    Use Drone [RMB] to FREEZE
-    the fusebox.
+    Use Drone [RMB] to FREEZE the Obstacle.
 
 
-    Move close along with a heat over 50% and use Robot [E] to
-    SMASH it.
+    Move
+    close along with a heat over 50% and use Robot [E] to SMASH it.
 
 
-    Destroy all connected fuses to open the door.'
+    DOOR LOCK
+    MECHANISM: This door is powered by local fuseboxes on the walls.
+
+
+    INSTRUCTION:
+
+
+    Use
+    Drone [RMB] to FREEZE the fusebox.
+
+
+    Move close along with a heat over 50%
+    and use Robot [E] to SMASH it.
+
+
+    Destroy all connected fuses to open the
+    door.'
 --- !u!65 &251046709
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18381,26 +18391,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7392985611642179355, guid: f533d3129260fec48aa145b87c3c9da9, type: 3}
   m_PrefabInstance: {fileID: 132644671}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1257540416 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 387364091424724237, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-  m_PrefabInstance: {fileID: 1721721881}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1257540420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1257540416}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad0479d352a0cda4b96638acd2028734, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DestroyableObject
-  maxHealth: 3
-  normalModel: {fileID: 0}
-  frozenModel: {fileID: 0}
 --- !u!4 &1257626126 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 331339058494320806, guid: e80d0380ecc96af42b77e3ca3a7faf8f, type: 3}
@@ -19970,6 +19960,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2217495289227363447, guid: 09b29d695a5ed074597c3e8840fa550a, type: 3}
+      propertyPath: turnSpeed
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 5902035431514095267, guid: 09b29d695a5ed074597c3e8840fa550a, type: 3}
       propertyPath: m_Name
       value: Robot
@@ -24823,86 +24817,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7155d9a618b4cdb4782df228f6097446, type: 3}
---- !u!1001 &1721721881
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1808531065}
-    m_Modifications:
-    - target: {fileID: 387364091424724237, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-      propertyPath: m_Name
-      value: Crate Short (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 387364091424724237, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 2115820573728629201, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 5907f9d681b08984bb53d8f24fb6b28c, type: 2}
-    - target: {fileID: 3691659005178554142, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3691659005178554142, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3691659005178554142, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3691659005178554142, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -149.84485
-      objectReference: {fileID: 0}
-    - target: {fileID: 3691659005178554142, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -8.7603
-      objectReference: {fileID: 0}
-    - target: {fileID: 3691659005178554142, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 88.80855
-      objectReference: {fileID: 0}
-    - target: {fileID: 3691659005178554142, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3691659005178554142, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.000000021855694
-      objectReference: {fileID: 0}
-    - target: {fileID: 3691659005178554142, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3691659005178554142, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3691659005178554142, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3691659005178554142, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3691659005178554142, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 387364091424724237, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1257540420}
-  m_SourcePrefab: {fileID: 100100000, guid: aedebdaeae12a6743b39120d2f5156b0, type: 3}
 --- !u!1001 &1722027215
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25981,7 +25895,6 @@ Transform:
   - {fileID: 366823306}
   - {fileID: 1160707502}
   - {fileID: 1691648128}
-  - {fileID: 110574439}
   m_Father: {fileID: 510399276}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1809538011 stripped
@@ -32900,6 +32813,18 @@ PrefabInstance:
     - target: {fileID: 1544227229906665064, guid: a21b53dee65b6ca4295d9bd9f3aba65e, type: 3}
       propertyPath: m_Name
       value: CinemachineCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 3646048891262373729, guid: a21b53dee65b6ca4295d9bd9f3aba65e, type: 3}
+      propertyPath: Damping.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3646048891262373729, guid: a21b53dee65b6ca4295d9bd9f3aba65e, type: 3}
+      propertyPath: Damping.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3646048891262373729, guid: a21b53dee65b6ca4295d9bd9f3aba65e, type: 3}
+      propertyPath: Damping.z
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8667286474260587391, guid: a21b53dee65b6ca4295d9bd9f3aba65e, type: 3}
       propertyPath: Target.TrackingTarget
