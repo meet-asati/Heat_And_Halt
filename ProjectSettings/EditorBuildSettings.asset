@@ -26,6 +26,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level 3 - Robot Boss Fight.unity
     guid: 3c2d463f588b8d245a1a24941a70a94e
+  - enabled: 1
+    path: Assets/Scenes/Slide 4.unity
+    guid: 76d9182226ea4f047aebd71606fa565d
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

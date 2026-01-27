@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8169286152241053941}
   - component: {fileID: 3100690205310784158}
+  - component: {fileID: 6852701801125344652}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -47,3 +48,17 @@ MonoBehaviour:
   enemiesRemaining: 0
   isGameOver: 0
   exitDoor: {fileID: 0}
+--- !u!114 &6852701801125344652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5646446941884083483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fa33e8b115c0284380aca074b752b51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialManager
+  tutorialPanel: {fileID: 0}
+  tutorialText: {fileID: 0}

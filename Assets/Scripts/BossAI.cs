@@ -2,39 +2,46 @@ using UnityEngine;
 
 public class BossAI : MonoBehaviour
 {
-    [Header("Boss Stats")]
+    [Header("Stats")]
     public float maxHealth = 1000f;
-    [SerializeField] private float currentHealth; // Serialized so you can see HP in Inspector
+    private float currentHealth;
     public bool isShielded = false;
 
     [Header("Thermal Shock Settings")]
-    public float freezeDuration = 4.0f; 
+    public float freezeDuration = 4.0f;
     public bool isFrozen = false;
     private float thawTimer;
 
     [Header("Minion Spawning")]
     public GameObject enemyDronePrefab;
     public Transform[] spawnPoints;
-    public float spawnInterval = 15f; // DEFAULT to 15
+    public float spawnInterval = 15f; 
     private float spawnTimer;
 
     [Header("References")]
     public GameObject coolingVents;
     public GameObject explosionPrefab;
     public GameObject victoryConsole;
-    
+
     // Internal
     private RobotMovement playerRobot;
     private Renderer bossRenderer;
     private Color originalColor;
 
+    [Header("Tutorial / Messages")]
+    [TextArea]
+    public string phaseTwoMessage = "ARMOR CRITICAL! \n\nVENTS EXPOSED on Shoulders. \nUse Drone Laser [RMB] to destroy them!";
+    private bool hasTriggeredPhase2 = false;
+
+    [TextArea] // <--- NEW VARIABLE
+    public string victoryMessage = "TARGET ELIMINATED.\n\nThreat Neutralized. \nPROCEED to the Control Room behind the door to execute sabotage prevention protocols.";
+
     void Start()
     {
         currentHealth = maxHealth;
         spawnTimer = spawnInterval;
-        
-        // SAFEGUARD: Prevent crash if Spawn Interval is 0
-        if (spawnInterval < 1f) spawnInterval = 15f; 
+
+        if (spawnInterval < 1f) spawnInterval = 15f;
 
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null) playerRobot = playerObj.GetComponent<RobotMovement>();
@@ -42,10 +49,9 @@ public class BossAI : MonoBehaviour
         bossRenderer = GetComponentInChildren<Renderer>();
         if (bossRenderer != null) originalColor = bossRenderer.material.color;
 
-        if (victoryConsole != null) victoryConsole.SetActive(false); 
+        if (victoryConsole != null) victoryConsole.SetActive(false);
         if (coolingVents != null) coolingVents.SetActive(false);
-        
-        // SETUP UI
+
         if (HUDManager.Instance != null)
         {
             HUDManager.Instance.ShowBossHealth(true);
@@ -57,39 +63,33 @@ public class BossAI : MonoBehaviour
     {
         if (currentHealth <= 0) return;
 
-        // 1. Thawing Logic
+        // Thawing Logic
         if (isFrozen)
         {
             thawTimer -= Time.deltaTime;
             if (thawTimer <= 0) ThawBoss();
         }
 
-        // 2. Minion Spawning
+        // Minion Spawning
         spawnTimer -= Time.deltaTime;
         if (spawnTimer <= 0)
         {
             SpawnMinions();
-            spawnTimer = spawnInterval; // Reset timer
+            spawnTimer = spawnInterval; 
         }
 
-        // 3. Rotation
+        // Rotation
         if (!isFrozen && playerRobot != null)
         {
-             Vector3 lookPos = playerRobot.transform.position;
-             lookPos.y = transform.position.y;
-             transform.LookAt(lookPos);
+            Vector3 lookPos = playerRobot.transform.position;
+            lookPos.y = transform.position.y;
+            transform.LookAt(lookPos);
         }
     }
 
     public void FreezeBoss()
     {
-        if (isShielded)
-        {
-            // FEEDBACK: Tell player why it failed
-            Debug.Log("BOSS IS SHIELDED! SHOOT THE VENTS!"); 
-            return;
-        }
-        
+        if (isShielded) return;
         if (isFrozen) return;
 
         isFrozen = true;
@@ -100,42 +100,27 @@ public class BossAI : MonoBehaviour
     void ThawBoss()
     {
         isFrozen = false;
-        if (bossRenderer != null) 
+        if (bossRenderer != null)
             bossRenderer.material.color = isShielded ? Color.red : originalColor;
     }
 
     public void TakeThermalDamage()
     {
-        // 1. Check Shield
-        if (isShielded) 
-        {
-            Debug.Log("ATTACK BLOCKED: Shield is Active! Destroy Vents first!");
-            return;
-        }
+        if (isShielded) return;
+        if (!isFrozen) return;
 
-        // 2. Check Frozen Status
-        if (!isFrozen)
-        {
-            Debug.Log("ATTACK BLOCKED: Boss is too hot! Freeze it first!");
-            return;
-        }
-
-        // 3. Check Robot Heat
         if (playerRobot != null && playerRobot.CurrentHeat > 50f)
         {
-            // SUCCESS
             float damage = 250f;
             currentHealth -= damage;
-            Debug.Log($"THERMAL SHOCK! Boss HP: {currentHealth}");
-
-            // Update UI
+            
             if (HUDManager.Instance != null)
                 HUDManager.Instance.UpdateBossHealth(currentHealth, maxHealth);
 
             ThawBoss();
 
-            // TRIGGER PHASE 2 (Shields Up)
-            if (currentHealth <= 500f && coolingVents != null && !coolingVents.activeSelf)
+            // Check for Phase 2 (50%)
+            if (currentHealth <= (maxHealth * 0.5f) && !isShielded)
             {
                 ActivateShieldPhase();
             }
@@ -146,34 +131,33 @@ public class BossAI : MonoBehaviour
 
     void ActivateShieldPhase()
     {
-        isShielded = true;
-        isFrozen = false; 
-        
-        // Show Vents
-        if (coolingVents != null) coolingVents.SetActive(true); 
-        else Debug.LogError("ERROR: Cooling Vents are not assigned in BossAI Inspector!");
+        if (hasTriggeredPhase2) return;
 
-        // Visuals
-        if (bossRenderer != null) bossRenderer.material.color = Color.red; 
-        
-        Debug.Log(">>> PHASE 2 STARTED: SHIELDS UP! DESTROY THE VENTS! <<<");
+        isShielded = true;
+        isFrozen = false;
+        hasTriggeredPhase2 = true;
+
+        if (coolingVents != null) coolingVents.SetActive(true);
+        if (bossRenderer != null) bossRenderer.material.color = Color.red;
+
+        // Show Phase 2 Message
+        if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.ShowTutorial(phaseTwoMessage);
+        }
     }
 
     public void VentDestroyed()
     {
         isShielded = false;
         if (bossRenderer != null) bossRenderer.material.color = originalColor;
-        Debug.Log(">>> SHIELD DESTROYED! FREEZE HIM NOW! <<<");
     }
 
     void SpawnMinions()
     {
         if (enemyDronePrefab == null) return;
-        
-        // Limit max minions to prevent lag (e.g., max 5 alive at once)
         GameObject[] activeMinions = GameObject.FindGameObjectsWithTag("Enemy");
-        // Count only drones, subtract 1 for the Boss itself
-        if (activeMinions.Length > 6) return; 
+        if (activeMinions.Length > 6) return;
 
         foreach (Transform sp in spawnPoints)
         {
@@ -185,10 +169,23 @@ public class BossAI : MonoBehaviour
     void Die()
     {
         Debug.Log("BOSS DEFEATED.");
-        if (explosionPrefab != null) Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         
+        // 1. Explosion Visuals
+        if (explosionPrefab != null) Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+
+        // 2. Hide Boss Model
         gameObject.SetActive(false);
+
+        // 3. Unlock Next Area (Optional: Show Console)
         if (victoryConsole != null) victoryConsole.SetActive(true);
+
+        // 4. Hide Boss Bar
         if (HUDManager.Instance != null) HUDManager.Instance.ShowBossHealth(false);
+
+        // 5. --- SHOW VICTORY MESSAGE ---
+        if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.ShowTutorial(victoryMessage);
+        }
     }
 }
