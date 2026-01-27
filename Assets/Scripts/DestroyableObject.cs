@@ -2,64 +2,61 @@ using UnityEngine;
 
 public class DestroyableObject : MonoBehaviour
 {
-    [Header("State")]
-    public bool IsFrozen = false;
+    [Header("Health Settings")]
+    public int maxHealth = 3; 
+    private int currentHealth;
 
-    [Header("Linked Objects")]
-    [Tooltip("Drag the Door GameObject here. It will vanish when this fusebox is smashed.")]
-    public GameObject doorToOpen; 
+    [Header("Visuals (Optional)")]
+    public GameObject normalModel;
+    public GameObject frozenModel;
 
-    [Header("Effects")]
-    public GameObject rubbleEffect; // Assign explosion particle
-    private Renderer objRenderer;
-    private Color originalColor;
+    private bool isFrozen = false;
+    private Renderer myRenderer; // To change color
 
     void Start()
     {
-        objRenderer = GetComponent<Renderer>();
-        if (objRenderer != null) originalColor = objRenderer.material.color;
+        currentHealth = maxHealth;
+        myRenderer = GetComponent<Renderer>(); // Get the renderer automatically
+        
+        // Safety: If normal model is not assigned, assume this object is the model
+        if (normalModel != null) normalModel.SetActive(true);
+        if (frozenModel != null) frozenModel.SetActive(false);
     }
 
-    // Called by Drone Laser
-    public void FreezeObject()
+    public void Freeze()
     {
-        if (IsFrozen) return;
-        
-        IsFrozen = true;
-        
-        // Visual Feedback: Turn Blue
-        if (objRenderer != null) objRenderer.material.color = Color.cyan;
-        Debug.Log("Fusebox Frozen! Circuits brittle.");
+        if (isFrozen) return;
+
+        isFrozen = true;
+        Debug.Log("TARGET FROZEN!");
+
+        // Option A: Swap Models (If you have them)
+        if (normalModel != null && frozenModel != null)
+        {
+            normalModel.SetActive(false);
+            frozenModel.SetActive(true);
+        }
+        // Option B: Change Color (If you don't have models)
+        else if (myRenderer != null)
+        {
+            myRenderer.material.color = Color.cyan; // Turn it Blue/Cyan
+        }
     }
 
-    // Called by Robot Smash
-    public void SmashObject()
+    public void TakeDamage(int damage)
     {
-
-        Debug.Log($"Attempting to smash: {gameObject.name}");
-
-        if (IsFrozen)
+        if (!isFrozen)
         {
-            Debug.Log("Fusebox Smashed!");
-
-            // --- NEW LOGIC START ---
-            if (doorToOpen != null)
-            {
-                DoorController doorLock = doorToOpen.GetComponent<DoorController>();
-                if (doorLock != null) doorLock.ReportFuseDestroyed();
-                else doorToOpen.SetActive(false);
-            }
-            // --- NEW LOGIC END ---
-
-            // 2. Play Effects
-            if (rubbleEffect != null) Instantiate(rubbleEffect, transform.position, Quaternion.identity);
-            
-            // 3. Destroy Fusebox
-            Destroy(gameObject);
+            // Optional: Play "Clang" sound
+            return; 
         }
-        else
-        {
-            Debug.Log("Fusebox is too tough! Freeze it first.");
-        }
+
+        currentHealth -= damage;
+        if (currentHealth <= 0) Die();
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
     }
 }

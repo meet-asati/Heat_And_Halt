@@ -27,6 +27,10 @@ public class DroneAI : MonoBehaviour
     private RobotMovement playerScript;
     private Rigidbody rb;
 
+    [Header("Ambush Settings")]
+    public bool startsActive = true; // Uncheck this for ambush drones
+    private bool isActive = false;
+
     void Start()
     {
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
@@ -44,10 +48,15 @@ public class DroneAI : MonoBehaviour
         }
 
         timer = hoverTime;
+
+        isActive = startsActive;
     }
 
     void Update()
     {
+
+        if (!isActive) return;
+
         if (IsFrozen || player == null) return;
 
         // Calculate the specific point we want to look at (Chest/Head)
@@ -154,5 +163,12 @@ public class DroneAI : MonoBehaviour
 
         if (explosionPrefab != null) Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
+    }
+
+    public void WakeUp()
+    {
+        isActive = true;
+        // Optional: Play a sound or animation here
+        Debug.Log(gameObject.name + " Waking up!");
     }
 }

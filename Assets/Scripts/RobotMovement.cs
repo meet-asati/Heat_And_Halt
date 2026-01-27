@@ -206,7 +206,7 @@ public class RobotMovement : MonoBehaviour
             DestroyableObject destObj = enemy.GetComponent<DestroyableObject>();
             if (destObj != null)
             {
-                destObj.SmashObject();
+                destObj.TakeDamage(1);
             }
 
             // 1. Check for Drone (Existing)

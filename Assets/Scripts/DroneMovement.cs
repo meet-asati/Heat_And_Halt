@@ -173,7 +173,7 @@ public class DroneMovement : MonoBehaviour
             DestroyableObject destObj = hit.collider.GetComponent<DestroyableObject>();
             if (destObj != null)
             {
-                destObj.FreezeObject();
+                destObj.Freeze();
                 laserEndPoint = hit.point;
                 foundTarget = true;
                 if (laserLine != null) laserLine.startColor = Color.cyan;

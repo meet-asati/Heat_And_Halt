@@ -30,11 +30,6 @@ public class GameManager : MonoBehaviour
     {
         enemiesRemaining--;
         Debug.Log($"Enemy Destroyed! Remaining: {enemiesRemaining}");
-
-        if (enemiesRemaining <= 0)
-        {
-            OpenLevelDoor();
-        }
     }
 
     void OpenLevelDoor()
