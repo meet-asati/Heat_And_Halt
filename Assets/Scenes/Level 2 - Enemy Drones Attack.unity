@@ -351,6 +351,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 36941908}
     m_Modifications:
+    - target: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+      propertyPath: startsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8171878350238386305, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
       propertyPath: m_Name
       value: Enemy drones (9)
@@ -477,6 +481,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 36941908}
     m_Modifications:
+    - target: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+      propertyPath: startsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8171878350238386305, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
       propertyPath: m_Name
       value: Enemy drones (2)
@@ -2993,6 +3001,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 36941908}
     m_Modifications:
+    - target: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+      propertyPath: startsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8171878350238386305, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
       propertyPath: m_Name
       value: Enemy drones (1)
@@ -3801,6 +3813,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 36941908}
     m_Modifications:
+    - target: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+      propertyPath: startsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8171878350238386305, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
       propertyPath: m_Name
       value: Enemy drones (13)
@@ -4306,6 +4322,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 207f61281715ab24f9899fdfa960ca48, type: 3}
+--- !u!114 &363402215 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+  m_PrefabInstance: {fileID: 622841907}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cc79478e23704147b6842936528618e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneAI
 --- !u!4 &365157108 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5274507026191901861, guid: 725564bae3f68e847ad41c0da4390174, type: 3}
@@ -4331,6 +4358,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7510896654343921132, guid: b59724de9db9dcd478d34686ffc3114e, type: 3}
   m_PrefabInstance: {fileID: 1504036283}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &375633318 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+  m_PrefabInstance: {fileID: 324269678}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cc79478e23704147b6842936528618e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneAI
 --- !u!4 &376792797 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5794367566485996295, guid: 4de76cf800351e24bad5a119957d8447, type: 3}
@@ -5780,6 +5818,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Doors
       objectReference: {fileID: 0}
+    - target: {fileID: 3531693907152980295, guid: 20dd42d998acdc2419f30f644d4ccd2c, type: 3}
+      propertyPath: requiredFuseboxes.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3531693907152980295, guid: 20dd42d998acdc2419f30f644d4ccd2c, type: 3}
+      propertyPath: 'requiredFuseboxes.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1890135422}
+    - target: {fileID: 3531693907152980295, guid: 20dd42d998acdc2419f30f644d4ccd2c, type: 3}
+      propertyPath: 'requiredFuseboxes.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1866271712}
     - target: {fileID: 5188025702555504676, guid: 20dd42d998acdc2419f30f644d4ccd2c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -217.1
@@ -7042,6 +7092,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fusebox 01 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 4858490672995591699, guid: b6bec4aa8990cc74ab0db9cd51ca7c09, type: 3}
+      propertyPath: m_TagString
+      value: Fusebox
+      objectReference: {fileID: 0}
     - target: {fileID: 5691233929441888595, guid: b6bec4aa8990cc74ab0db9cd51ca7c09, type: 3}
       propertyPath: m_LocalScale.x
       value: 10
@@ -7240,6 +7294,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 36941908}
     m_Modifications:
+    - target: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+      propertyPath: startsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8171878350238386305, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
       propertyPath: m_Name
       value: Enemy drones (4)
@@ -8656,6 +8714,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 36941908}
     m_Modifications:
+    - target: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+      propertyPath: startsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8171878350238386305, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
       propertyPath: m_Name
       value: Enemy drones (11)
@@ -9153,6 +9215,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79586e09cccd2284e8c1b12d894d40cc, type: 3}
+--- !u!114 &784725502 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+  m_PrefabInstance: {fileID: 1381029010}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cc79478e23704147b6842936528618e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneAI
 --- !u!1001 &784838660
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10020,6 +10093,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 010d97c374d5bb2449986f0fe29bb8c8, type: 3}
+--- !u!114 &911102731 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+  m_PrefabInstance: {fileID: 1151688265}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cc79478e23704147b6842936528618e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneAI
 --- !u!4 &911444775 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3396001746467026945, guid: 207f61281715ab24f9899fdfa960ca48, type: 3}
@@ -10322,6 +10406,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 36941908}
     m_Modifications:
+    - target: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+      propertyPath: startsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8171878350238386305, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
       propertyPath: m_Name
       value: Enemy drones (7)
@@ -11140,6 +11228,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 36941908}
     m_Modifications:
+    - target: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+      propertyPath: startsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8171878350238386305, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
       propertyPath: m_Name
       value: Enemy drones (14)
@@ -11609,6 +11701,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8801028441053483579, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
   m_PrefabInstance: {fileID: 947513402}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1070230184 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+  m_PrefabInstance: {fileID: 947513402}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cc79478e23704147b6842936528618e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneAI
 --- !u!1001 &1070253746
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12667,6 +12770,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 36941908}
     m_Modifications:
+    - target: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+      propertyPath: startsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8171878350238386305, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
       propertyPath: m_Name
       value: Enemy drones (10)
@@ -12873,6 +12980,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7510896654343921132, guid: b59724de9db9dcd478d34686ffc3114e, type: 3}
   m_PrefabInstance: {fileID: 1073232704}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1187916899 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+  m_PrefabInstance: {fileID: 1692513260}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cc79478e23704147b6842936528618e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneAI
 --- !u!1001 &1191683361
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13844,6 +13962,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 36941908}
     m_Modifications:
+    - target: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+      propertyPath: startsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8171878350238386305, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
       propertyPath: m_Name
       value: Enemy drones (5)
@@ -15206,6 +15328,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 36941908}
     m_Modifications:
+    - target: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+      propertyPath: startsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8171878350238386305, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
       propertyPath: m_Name
       value: Enemy drones (3)
@@ -15636,6 +15762,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8801028441053483579, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
   m_PrefabInstance: {fileID: 1949447855}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1440113737 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+  m_PrefabInstance: {fileID: 1949447855}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cc79478e23704147b6842936528618e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneAI
 --- !u!1001 &1440122779
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15894,6 +16031,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8801028441053483579, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
   m_PrefabInstance: {fileID: 19923804}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1451348056 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+  m_PrefabInstance: {fileID: 19923804}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cc79478e23704147b6842936528618e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneAI
 --- !u!1001 &1451492254
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16028,6 +16176,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 36941908}
     m_Modifications:
+    - target: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+      propertyPath: startsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8171878350238386305, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
       propertyPath: m_Name
       value: Enemy drones (6)
@@ -16285,6 +16437,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8604125577131890900, guid: 5a52ee26872b2354ea8b130f7d9f63b8, type: 3}
   m_PrefabInstance: {fileID: 1475177797}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1477189410 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+  m_PrefabInstance: {fileID: 244560875}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cc79478e23704147b6842936528618e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneAI
 --- !u!1001 &1478863203
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17082,6 +17245,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 798630636027598890, guid: b4f3d90b18d526c43941c2394a07218e, type: 3}
   m_PrefabInstance: {fileID: 721678043}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1543737986 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+  m_PrefabInstance: {fileID: 715053913}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cc79478e23704147b6842936528618e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneAI
 --- !u!4 &1544953496 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5794367566485996295, guid: 4de76cf800351e24bad5a119957d8447, type: 3}
@@ -18543,6 +18717,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 36941908}
     m_Modifications:
+    - target: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+      propertyPath: startsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8171878350238386305, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
       propertyPath: m_Name
       value: Enemy drones (8)
@@ -18672,6 +18850,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 816839028834127517, guid: 56553c59a52bf504aaac866c7f4030cd, type: 3}
   m_PrefabInstance: {fileID: 472340487}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1708819153 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+  m_PrefabInstance: {fileID: 1275622541}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cc79478e23704147b6842936528618e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneAI
 --- !u!4 &1716437561 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 816839028834127517, guid: 56553c59a52bf504aaac866c7f4030cd, type: 3}
@@ -19576,6 +19765,148 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2787532668687943286, guid: 79586e09cccd2284e8c1b12d894d40cc, type: 3}
   m_PrefabInstance: {fileID: 1330574324}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1825099614
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1825099619}
+  - component: {fileID: 1825099618}
+  - component: {fileID: 1825099617}
+  - component: {fileID: 1825099616}
+  - component: {fileID: 1825099615}
+  m_Layer: 0
+  m_Name: EnemyTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1825099615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1825099614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3e256accf9a5214b8dd24e99b193bf4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatTrigger
+  drones:
+  - {fileID: 1981013870}
+  - {fileID: 1477189410}
+  - {fileID: 1451348056}
+  - {fileID: 784725502}
+  - {fileID: 363402215}
+  - {fileID: 1708819153}
+  - {fileID: 1841674835}
+  - {fileID: 1070230184}
+  - {fileID: 1187916899}
+  - {fileID: 1931937229}
+  - {fileID: 911102731}
+  - {fileID: 1543737986}
+  - {fileID: 1440113737}
+  - {fileID: 375633318}
+  - {fileID: 2063373442}
+  boss: {fileID: 0}
+--- !u!65 &1825099616
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1825099614}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1825099617
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1825099614}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1825099618
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1825099614}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1825099619
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1825099614}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -49.8, y: -0.7, z: 21.9}
+  m_LocalScale: {x: 41.73425, y: 41.73425, z: 114.685715}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1830505299 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8240169095854549620, guid: e2065e8f29774454889634d57ec0a96f, type: 3}
@@ -19647,6 +19978,17 @@ Transform:
   - {fileID: 2088594118}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1841674835 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+  m_PrefabInstance: {fileID: 1455472234}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cc79478e23704147b6842936528618e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneAI
 --- !u!4 &1842288694 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7510896654343921132, guid: b59724de9db9dcd478d34686ffc3114e, type: 3}
@@ -19803,6 +20145,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79586e09cccd2284e8c1b12d894d40cc, type: 3}
+--- !u!1 &1866271712 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4858490672995591699, guid: b6bec4aa8990cc74ab0db9cd51ca7c09, type: 3}
+  m_PrefabInstance: {fileID: 613358650}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1866774391 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8969971835649028076, guid: 4e661a4b9cf2fac4dbc610ceb59e77b8, type: 3}
@@ -20022,6 +20369,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3396001746467026945, guid: 207f61281715ab24f9899fdfa960ca48, type: 3}
   m_PrefabInstance: {fileID: 784838660}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1890135422 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4858490672995591699, guid: b6bec4aa8990cc74ab0db9cd51ca7c09, type: 3}
+  m_PrefabInstance: {fileID: 2146996302}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1894170976
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20030,6 +20382,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 36941908}
     m_Modifications:
+    - target: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+      propertyPath: startsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8171878350238386305, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
       propertyPath: m_Name
       value: Enemy drones
@@ -20451,6 +20807,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8801028441053483579, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
   m_PrefabInstance: {fileID: 17005101}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1931937229 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+  m_PrefabInstance: {fileID: 17005101}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cc79478e23704147b6842936528618e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneAI
 --- !u!1001 &1932752580
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20865,6 +21232,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 36941908}
     m_Modifications:
+    - target: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+      propertyPath: startsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8171878350238386305, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
       propertyPath: m_Name
       value: Enemy drones (12)
@@ -21179,6 +21550,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 010d97c374d5bb2449986f0fe29bb8c8, type: 3}
+--- !u!114 &1981013870 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+  m_PrefabInstance: {fileID: 1894170976}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cc79478e23704147b6842936528618e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneAI
 --- !u!1001 &1986755494
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22115,6 +22497,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3396001746467026945, guid: 207f61281715ab24f9899fdfa960ca48, type: 3}
   m_PrefabInstance: {fileID: 900964757}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2063373442 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
+  m_PrefabInstance: {fileID: 1021639613}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cc79478e23704147b6842936528618e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroneAI
 --- !u!1001 &2065806442
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23123,6 +23516,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fusebox 01 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 4858490672995591699, guid: b6bec4aa8990cc74ab0db9cd51ca7c09, type: 3}
+      propertyPath: m_TagString
+      value: Fusebox
+      objectReference: {fileID: 0}
     - target: {fileID: 5691233929441888595, guid: b6bec4aa8990cc74ab0db9cd51ca7c09, type: 3}
       propertyPath: m_LocalScale.x
       value: 10
@@ -23268,3 +23665,4 @@ SceneRoots:
   - {fileID: 1675506830}
   - {fileID: 194596087}
   - {fileID: 1021260332}
+  - {fileID: 1825099619}
