@@ -9,6 +9,7 @@ TagManager:
   - Drone
   - Enemy
   - Fusebox
+  - Environment
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - Water
   - UI
   - Enemy
-  - 
+  - Environment
   - 
   - 
   - 
