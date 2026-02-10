@@ -1421,7 +1421,7 @@ PrefabInstance:
     - target: {fileID: 4955230410814567547, guid: 5c1b535d3782bee49819656f221e56de, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 721d175fb8a71214e83757fe1223ea31, type: 2}
+      objectReference: {fileID: 2100000, guid: cf94f0182ada28f4287c3347af19e763, type: 2}
     - target: {fileID: 4955230411458969162, guid: 5c1b535d3782bee49819656f221e56de, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -12213,6 +12213,7 @@ GameObject:
   - component: {fileID: 408725343}
   - component: {fileID: 408725345}
   - component: {fileID: 408725344}
+  - component: {fileID: 408725346}
   m_Layer: 7
   m_Name: Area Light (1)
   m_TagString: Untagged
@@ -12329,6 +12330,22 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!114 &408725346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 408725342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25767c2715da8bf4a8f6bc66ff9ced10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlickeringLight
+  minIntensity: 2
+  maxIntensity: 10
+  flickerSpeedMin: 0.01
+  flickerSpeedMax: 0.1
 --- !u!1001 &408917132
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12670,7 +12687,7 @@ PrefabInstance:
     - target: {fileID: 1689052008531517473, guid: 528f6c40ba01da34f96f492e501fd927, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 721d175fb8a71214e83757fe1223ea31, type: 2}
+      objectReference: {fileID: 2100000, guid: cf94f0182ada28f4287c3347af19e763, type: 2}
     - target: {fileID: 4113818417770440430, guid: 528f6c40ba01da34f96f492e501fd927, type: 3}
       propertyPath: m_LocalScale.x
       value: 7
@@ -14677,6 +14694,7 @@ GameObject:
   - component: {fileID: 479816282}
   - component: {fileID: 479816284}
   - component: {fileID: 479816283}
+  - component: {fileID: 479816285}
   m_Layer: 7
   m_Name: Area Light (1)
   m_TagString: Untagged
@@ -14793,6 +14811,22 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!114 &479816285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 479816281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25767c2715da8bf4a8f6bc66ff9ced10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlickeringLight
+  minIntensity: 2
+  maxIntensity: 10
+  flickerSpeedMin: 0.01
+  flickerSpeedMax: 0.1
 --- !u!1001 &480206353
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21235,6 +21269,7 @@ GameObject:
   - component: {fileID: 716726673}
   - component: {fileID: 716726675}
   - component: {fileID: 716726674}
+  - component: {fileID: 716726676}
   m_Layer: 7
   m_Name: Area Light (1)
   m_TagString: Untagged
@@ -21351,6 +21386,22 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!114 &716726676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716726672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25767c2715da8bf4a8f6bc66ff9ced10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlickeringLight
+  minIntensity: 2
+  maxIntensity: 10
+  flickerSpeedMin: 0.01
+  flickerSpeedMax: 0.1
 --- !u!1001 &717047847
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26726,11 +26777,11 @@ PrefabInstance:
     - target: {fileID: 2225292343549234468, guid: 6d25ffad04977674abb78a1e1ff00730, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 721d175fb8a71214e83757fe1223ea31, type: 2}
+      objectReference: {fileID: 2100000, guid: 6285e69dd31901f41b1639eceb59d5e2, type: 2}
     - target: {fileID: 2225292344056186364, guid: 6d25ffad04977674abb78a1e1ff00730, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 721d175fb8a71214e83757fe1223ea31, type: 2}
+      objectReference: {fileID: 2100000, guid: cf94f0182ada28f4287c3347af19e763, type: 2}
     - target: {fileID: 2225292344243773031, guid: 6d25ffad04977674abb78a1e1ff00730, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -26738,7 +26789,7 @@ PrefabInstance:
     - target: {fileID: 2225292344364807445, guid: 6d25ffad04977674abb78a1e1ff00730, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 721d175fb8a71214e83757fe1223ea31, type: 2}
+      objectReference: {fileID: 2100000, guid: cf94f0182ada28f4287c3347af19e763, type: 2}
     - target: {fileID: 3496583644570392744, guid: 6d25ffad04977674abb78a1e1ff00730, type: 3}
       propertyPath: m_LocalScale.x
       value: 7
@@ -40004,7 +40055,7 @@ PrefabInstance:
     - target: {fileID: 2816498414024580804, guid: 68b56f98a24210a4e82f6c092adcd68e, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: c054cb86a66aa9543af0bcf9e5b95fdc, type: 2}
+      objectReference: {fileID: 2100000, guid: 8bbe176926e140b4c83379e7f268e765, type: 2}
     - target: {fileID: 4551697137065323032, guid: 68b56f98a24210a4e82f6c092adcd68e, type: 3}
       propertyPath: m_Name
       value: Pipes 06
@@ -47617,7 +47668,7 @@ PrefabInstance:
     - target: {fileID: 1689052008531517473, guid: 528f6c40ba01da34f96f492e501fd927, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 721d175fb8a71214e83757fe1223ea31, type: 2}
+      objectReference: {fileID: 2100000, guid: 626454dbaadbfbe4b84c32f9137e40ba, type: 2}
     - target: {fileID: 4113818417770440430, guid: 528f6c40ba01da34f96f492e501fd927, type: 3}
       propertyPath: m_LocalScale.x
       value: 8
@@ -57696,7 +57747,7 @@ PrefabInstance:
     - target: {fileID: 6012261076398810688, guid: f27fcf47b279da042ae6ff22c72d9949, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 721d175fb8a71214e83757fe1223ea31, type: 2}
+      objectReference: {fileID: 2100000, guid: 8bbe176926e140b4c83379e7f268e765, type: 2}
     - target: {fileID: 6225358861170117921, guid: f27fcf47b279da042ae6ff22c72d9949, type: 3}
       propertyPath: m_Name
       value: Shelves Empty
