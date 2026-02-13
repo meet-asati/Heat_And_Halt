@@ -1,73 +1,83 @@
 using UnityEngine;
-using UnityEngine.Rendering; // Required for AmbientMode
+using UnityEngine.Rendering;
 
 public class FactoryPowerManager : MonoBehaviour
 {
     [Header("UI Settings")]
-    [Tooltip("Assign the Popup GameObject (Text/Image) here.")]
     public GameObject powerOutagePopup; 
 
     [Header("Lighting Settings")]
-    // RGB (60, 60, 60)
     public Color blackoutColor = new Color32(60, 60, 60, 255); 
-    
-    // Store the original skybox material to restore it later
     private Material defaultSkybox;
+
+    [Header("Progression")]
+    [Tooltip("Drag ALL fuse boxes that should be locked/unlocked here.")]
+    // specific change: changed from single variable to an Array []
+    public DestroyableObject[] progressionFuseBoxes; 
 
     void Start()
     {
-        // Save the current skybox so we can restore it later
         defaultSkybox = RenderSettings.skybox;
+        if (powerOutagePopup != null) powerOutagePopup.SetActive(false);
 
-        // Ensure popup is hidden at start
-        if (powerOutagePopup != null)
-            powerOutagePopup.SetActive(false);
+        // Lock ALL progression boxes at start (Optional safety check)
+        LockAllFuseBoxes();
     }
 
-    // Call this function when the First Fuse Box is destroyed
     public void TriggerBlackout()
     {
-        // 1. Change Mode from Skybox to Color (Flat)
         RenderSettings.ambientMode = AmbientMode.Flat;
-        
-        // 2. Set the Ambient Color to Dark Gray (60, 60, 60)
         RenderSettings.ambientLight = blackoutColor;
 
-        // 3. Show the Popup
         if (powerOutagePopup != null)
         {
             powerOutagePopup.SetActive(true);
-            // Optional: Hide popup after 5 seconds
             Invoke("HidePopup", 5f); 
         }
 
-        Debug.Log("Factory Power: BLACKOUT TRIGGERED");
-        
-        // Force lighting update
+        // Lock them just in case
+        LockAllFuseBoxes();
+
         DynamicGI.UpdateEnvironment();
     }
 
-    // Call this function when the Second Fuse Box (Generator) is destroyed
     public void RestorePower()
     {
-        // 1. Restore the original Skybox Material
         RenderSettings.skybox = defaultSkybox;
-
-        // 2. Change Mode back to Skybox
         RenderSettings.ambientMode = AmbientMode.Skybox;
+        
+        if (powerOutagePopup != null) powerOutagePopup.SetActive(false);
 
-        // 3. Hide the popup if it's still there
-        HidePopup();
+        // UNLOCK ALL FUSE BOXES
+        UnlockAllFuseBoxes();
 
-        Debug.Log("Factory Power: POWER RESTORED");
-
-        // Force lighting update
         DynamicGI.UpdateEnvironment();
+    }
+
+    // Helper function to lock everything in the list
+    void LockAllFuseBoxes()
+    {
+        foreach (DestroyableObject box in progressionFuseBoxes)
+        {
+            if (box != null) box.SetDestructible(false);
+        }
+    }
+
+    // Helper function to unlock everything in the list
+    void UnlockAllFuseBoxes()
+    {
+        foreach (DestroyableObject box in progressionFuseBoxes)
+        {
+            if (box != null) 
+            {
+                box.SetDestructible(true);
+            }
+        }
+        Debug.Log("Factory Power Restored! Progression Fuse Boxes Unlocked.");
     }
 
     void HidePopup()
     {
-        if (powerOutagePopup != null)
-            powerOutagePopup.SetActive(false);
+        if (powerOutagePopup != null) powerOutagePopup.SetActive(false);
     }
 }
