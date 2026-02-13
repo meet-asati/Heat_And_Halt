@@ -26,19 +26,28 @@ public class FactoryPowerManager : MonoBehaviour
 
     public void TriggerBlackout()
     {
+        // 1. Cut the Lights
         RenderSettings.ambientMode = AmbientMode.Flat;
         RenderSettings.ambientLight = blackoutColor;
 
+        // 2. Show the Message IMMEDIATELY
         if (powerOutagePopup != null)
         {
             powerOutagePopup.SetActive(true);
-            Invoke("HidePopup", 5f); 
+            
+            // OPTION A: Hide automatically after 5 seconds (Keep this if you want it to fade)
+            Invoke("HidePopup", 7f); 
+
+            // OPTION B: Keep it on screen until power is back (Delete the line above if you want this)
         }
 
-        // Lock them just in case
+        // 3. Lock Progression
         LockAllFuseBoxes();
 
+        // 4. Update Global Illumination
         DynamicGI.UpdateEnvironment();
+        
+        Debug.Log("Power Cut! Message Displayed Instantly.");
     }
 
     public void RestorePower()

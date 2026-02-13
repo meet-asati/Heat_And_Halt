@@ -315,6 +315,9 @@ MonoBehaviour:
   maxHealth: 3
   normalModel: {fileID: 0}
   frozenModel: {fileID: 0}
+  isIndestructible: 1
+  lockedMessage: Power must be restored first!
+  lockedMessageUI: {fileID: 1025178119}
   OnDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -10640,6 +10643,146 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!1 &347923113
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 347923114}
+  - component: {fileID: 347923116}
+  - component: {fileID: 347923115}
+  m_Layer: 5
+  m_Name: Text (TMP)Power
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &347923114
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 347923113}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1408063343}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 187}
+  m_SizeDelta: {x: 200, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &347923115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 347923113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: "POWER FAILURE DETECTED\r\nMain lighting systems offline. \r\nEmergency
+    illumination active.\r\nRestore generator power immediately. \r\nTo restore the
+    power, go into the left corridor, which leads to the power room, and destroy
+    the fuse of the power generator."
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 18
+  m_fontSizeBase: 18
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: -174.63997, y: 0, z: -176.16043, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &347923116
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 347923113}
+  m_CullTransparentMesh: 1
 --- !u!1001 &348325341
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14859,6 +15002,7 @@ Transform:
   m_Children:
   - {fileID: 1704286666}
   - {fileID: 251046712}
+  - {fileID: 1611840573}
   - {fileID: 1273706161}
   - {fileID: 285312072}
   m_Father: {fileID: 0}
@@ -29329,8 +29473,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bae037b7a5d1bd4781e75c796a20b90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FactoryPowerManager
-  powerOutagePopup: {fileID: 0}
+  powerOutagePopup: {fileID: 347923113}
   blackoutColor: {r: 0.23529412, g: 0.23529412, b: 0.23529412, a: 1}
+  progressionFuseBoxes:
+  - {fileID: 20818581}
+  - {fileID: 1362812846076636263}
 --- !u!4 &1020316918
 Transform:
   m_ObjectHideFlags: 0
@@ -29417,6 +29564,143 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7748931418113537441, guid: 774524ae8cc6790408dad32639bd8509, type: 3}
   m_PrefabInstance: {fileID: 1021782543}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1025178119
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1025178122}
+  - component: {fileID: 1025178121}
+  - component: {fileID: 1025178120}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1025178120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025178119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Power Off! Cannot Destroy!
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 22
+  m_fontSizeBase: 22
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: -135.09601, y: 0, z: 57.73265, w: 24.479652}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1025178121
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025178119}
+  m_CullTransparentMesh: 1
+--- !u!224 &1025178122
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025178119}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1408063343}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 101, y: 179}
+  m_SizeDelta: {x: 200, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!4 &1025667545 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7776224926991852634, guid: 30023cc824132bd4bb6a2cd831be15ba, type: 3}
@@ -36847,6 +37131,9 @@ MonoBehaviour:
   maxHealth: 3
   normalModel: {fileID: 0}
   frozenModel: {fileID: 0}
+  isIndestructible: 0
+  lockedMessage: Power must be restored first!
+  lockedMessageUI: {fileID: 0}
   OnDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -37497,7 +37784,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5902035431514251905, guid: 09b29d695a5ed074597c3e8840fa550a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -62.3
+      value: -53
       objectReference: {fileID: 0}
     - target: {fileID: 5902035431514251905, guid: 09b29d695a5ed074597c3e8840fa550a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -37840,6 +38127,11 @@ PrefabInstance:
       addedObject: {fileID: 1995229804}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30023cc824132bd4bb6a2cd831be15ba, type: 3}
+--- !u!224 &1408063343 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3379508939390409082, guid: f222cd0bc18979f4f9e3c0bdeb42a421, type: 3}
+  m_PrefabInstance: {fileID: 6297349174755936710}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1408596756 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400004, guid: 401656ee5d01d524e8c8caf3d47e2be9, type: 3}
@@ -42301,6 +42593,136 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!1 &1611840572
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1611840573}
+  - component: {fileID: 1611840577}
+  - component: {fileID: 1611840576}
+  - component: {fileID: 1611840575}
+  - component: {fileID: 1611840574}
+  m_Layer: 0
+  m_Name: Fourth
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1611840573
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1611840572}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -191.2662, y: 4.6467104, z: 122.73}
+  m_LocalScale: {x: 50, y: 12.839, z: 4.0407357}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 494641689}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1611840574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1611840572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419b835333b38b445b96483a10da2bfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialTrigger
+  message: "POWER FAILURE DETECTED\nMain lighting systems offline. \nEmergency illumination
+    active.\nRestore generator power immediately. \nTo restore the power, go into
+    the left corridor, which leads to the power room, and destroy the fuse of the
+    power generator."
+  bossToWake: {fileID: 0}
+--- !u!65 &1611840575
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1611840572}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1611840576
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1611840572}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1611840577
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1611840572}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1614071596
 GameObject:
   m_ObjectHideFlags: 0
@@ -44630,6 +45052,9 @@ MonoBehaviour:
   maxHealth: 3
   normalModel: {fileID: 0}
   frozenModel: {fileID: 0}
+  isIndestructible: 0
+  lockedMessage: Power must be restored first!
+  lockedMessageUI: {fileID: 0}
   OnDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -50574,6 +50999,9 @@ MonoBehaviour:
   maxHealth: 3
   normalModel: {fileID: 0}
   frozenModel: {fileID: 0}
+  isIndestructible: 0
+  lockedMessage: Power must be restored first!
+  lockedMessageUI: {fileID: 0}
   OnDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -52131,6 +52559,9 @@ MonoBehaviour:
   maxHealth: 3
   normalModel: {fileID: 0}
   frozenModel: {fileID: 0}
+  isIndestructible: 0
+  lockedMessage: Power must be restored first!
+  lockedMessageUI: {fileID: 0}
   OnDestroyed:
     m_PersistentCalls:
       m_Calls:
@@ -57695,6 +58126,9 @@ MonoBehaviour:
   maxHealth: 3
   normalModel: {fileID: 0}
   frozenModel: {fileID: 0}
+  isIndestructible: 0
+  lockedMessage: Power must be restored first!
+  lockedMessageUI: {fileID: 0}
   OnDestroyed:
     m_PersistentCalls:
       m_Calls:
@@ -59272,6 +59706,14 @@ PrefabInstance:
       propertyPath: doorToOpen
       value: 
       objectReference: {fileID: 494811089}
+    - target: {fileID: 7122333679298324770, guid: b6bec4aa8990cc74ab0db9cd51ca7c09, type: 3}
+      propertyPath: lockedMessageUI
+      value: 
+      objectReference: {fileID: 1025178119}
+    - target: {fileID: 7122333679298324770, guid: b6bec4aa8990cc74ab0db9cd51ca7c09, type: 3}
+      propertyPath: isIndestructible
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -59282,6 +59724,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5691233929441888595, guid: b6bec4aa8990cc74ab0db9cd51ca7c09, type: 3}
   m_PrefabInstance: {fileID: 1295177909125895378}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1362812846076636263 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7122333679298324770, guid: b6bec4aa8990cc74ab0db9cd51ca7c09, type: 3}
+  m_PrefabInstance: {fileID: 1295177909125895378}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2087442022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad0479d352a0cda4b96638acd2028734, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DestroyableObject
 --- !u!1001 &2004368794765436066
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59308,7 +59761,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9171781115664492331, guid: a21b53dee65b6ca4295d9bd9f3aba65e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -56.409996
+      value: -47.109997
       objectReference: {fileID: 0}
     - target: {fileID: 9171781115664492331, guid: a21b53dee65b6ca4295d9bd9f3aba65e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -59366,7 +59819,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3543492795009567878, guid: 13dfbafd651f8fc4e9b867cd8a3bf508, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -56.409996
+      value: -47.109997
       objectReference: {fileID: 0}
     - target: {fileID: 3543492795009567878, guid: 13dfbafd651f8fc4e9b867cd8a3bf508, type: 3}
       propertyPath: m_LocalRotation.w
@@ -59721,7 +60174,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3602735934605212420, guid: f017369ea35a77a4ca7f6dc19688557a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 21.737598
+      value: 21.737597
       objectReference: {fileID: 0}
     - target: {fileID: 3602735934605212420, guid: f017369ea35a77a4ca7f6dc19688557a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -59729,7 +60182,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3602735934605212420, guid: f017369ea35a77a4ca7f6dc19688557a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -58.781986
+      value: -49.481983
       objectReference: {fileID: 0}
     - target: {fileID: 3602735934605212420, guid: f017369ea35a77a4ca7f6dc19688557a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -60987,7 +61440,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 1520743877304492403, guid: f222cd0bc18979f4f9e3c0bdeb42a421, type: 3}
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3379508939390409082, guid: f222cd0bc18979f4f9e3c0bdeb42a421, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1025178122}
+    - targetCorrespondingSourceObject: {fileID: 3379508939390409082, guid: f222cd0bc18979f4f9e3c0bdeb42a421, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 347923114}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f222cd0bc18979f4f9e3c0bdeb42a421, type: 3}
 --- !u!1001 &6361264683593107283
@@ -61148,7 +61607,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1836922233920674274, guid: 3fe6d25b7c70b604fa52d376ed11916a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -51.100006
+      value: -41.799995
       objectReference: {fileID: 0}
     - target: {fileID: 1836922233920674274, guid: 3fe6d25b7c70b604fa52d376ed11916a, type: 3}
       propertyPath: m_LocalRotation.w
