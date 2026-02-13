@@ -3,18 +3,21 @@ using UnityEngine;
 public class BossVent : MonoBehaviour
 {
     public float health = 50f;
-    public BossAI bossScript; // Reference to main boss script
+    // Drag the main BOSS object here in the inspector
+    public BossAI bossScript; 
 
-    // Called by Drone Laser
     public void TakeLaserDamage(float amount)
     {
         health -= amount;
         if (health <= 0)
         {
-            // Tell boss we broke the shield
-            if(bossScript != null) bossScript.VentDestroyed();
+            // Report to the boss before dying
+            if(bossScript != null) 
+            {
+                bossScript.ReportVentDestroyed();
+            }
             
-            // Visual feedback
+            // Visual FX could go here
             Destroy(gameObject);
         }
     }

@@ -1,6 +1,6 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.InputSystem; // Required for New Input System
+using UnityEngine.InputSystem; 
 
 public class TutorialManager : MonoBehaviour
 {
@@ -11,10 +11,12 @@ public class TutorialManager : MonoBehaviour
     public TextMeshProUGUI tutorialText;
 
     private bool isTutorialActive = false;
+    
+    // NEW: Variable to store "What to do next"
+    private System.Action onTutorialClosed;
 
     void Awake()
     {
-        // Singleton setup (allows Triggers to find this easily)
         if (Instance == null) Instance = this;
     }
 
@@ -25,10 +27,8 @@ public class TutorialManager : MonoBehaviour
 
     void Update()
     {
-        // Only listen for input if a tutorial is currently showing
         if (isTutorialActive)
         {
-            // Check for Enter Key (New Input System)
             if (Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.numpadEnterKey.wasPressedThisFrame)
             {
                 DismissTutorial();
@@ -36,14 +36,17 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    public void ShowTutorial(string message)
+    // UPDATED: Now accepts an optional "onDismiss" action
+    public void ShowTutorial(string message, System.Action onDismiss = null)
     {
         if (tutorialPanel == null) return;
 
         tutorialText.text = message;
         tutorialPanel.SetActive(true);
         
-        // PAUSE THE GAME
+        // Save the action for later
+        this.onTutorialClosed = onDismiss;
+
         Time.timeScale = 0f; 
         isTutorialActive = true;
     }
@@ -51,9 +54,14 @@ public class TutorialManager : MonoBehaviour
     public void DismissTutorial()
     {
         tutorialPanel.SetActive(false);
-        
-        // RESUME THE GAME
         Time.timeScale = 1f; 
         isTutorialActive = false;
+        
+        // NEW: Execute the stored action (Wake up the boss!)
+        if (onTutorialClosed != null)
+        {
+            onTutorialClosed.Invoke();
+            onTutorialClosed = null; // Clear it so it doesn't run again
+        }
     }
 }
