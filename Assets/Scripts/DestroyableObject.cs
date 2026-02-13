@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events; // Added to support UnityEvents
 
 public class DestroyableObject : MonoBehaviour
 {
@@ -10,15 +11,18 @@ public class DestroyableObject : MonoBehaviour
     public GameObject normalModel;
     public GameObject frozenModel;
 
+    [Header("Events")]
+    // This allows us to trigger the lighting change from the Inspector
+    public UnityEvent OnDestroyed; 
+
     private bool isFrozen = false;
-    private Renderer myRenderer; // To change color
+    private Renderer myRenderer; 
 
     void Start()
     {
         currentHealth = maxHealth;
-        myRenderer = GetComponent<Renderer>(); // Get the renderer automatically
+        myRenderer = GetComponent<Renderer>(); 
         
-        // Safety: If normal model is not assigned, assume this object is the model
         if (normalModel != null) normalModel.SetActive(true);
         if (frozenModel != null) frozenModel.SetActive(false);
     }
@@ -28,18 +32,16 @@ public class DestroyableObject : MonoBehaviour
         if (isFrozen) return;
 
         isFrozen = true;
-        Debug.Log("TARGET FROZEN!");
+        // Debug.Log("TARGET FROZEN!"); // Commented out to reduce console spam
 
-        // Option A: Swap Models (If you have them)
         if (normalModel != null && frozenModel != null)
         {
             normalModel.SetActive(false);
             frozenModel.SetActive(true);
         }
-        // Option B: Change Color (If you don't have models)
         else if (myRenderer != null)
         {
-            myRenderer.material.color = Color.cyan; // Turn it Blue/Cyan
+            myRenderer.material.color = Color.cyan; 
         }
     }
 
@@ -47,7 +49,7 @@ public class DestroyableObject : MonoBehaviour
     {
         if (!isFrozen)
         {
-            // Optional: Play "Clang" sound
+            // Optional: Play "Clang" sound here
             return; 
         }
 
@@ -57,6 +59,9 @@ public class DestroyableObject : MonoBehaviour
 
     void Die()
     {
+        // trigger whatever logic is connected to this object (e.g., Lights Off)
+        OnDestroyed.Invoke(); 
+
         Destroy(gameObject);
     }
 }

@@ -24,7 +24,7 @@ RenderSettings:
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 3
+  m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: 8e39ad5967bcc554c992646fcbe136c6, type: 2}
   m_HaloStrength: 0.5
@@ -315,6 +315,9 @@ MonoBehaviour:
   maxHealth: 3
   normalModel: {fileID: 0}
   frozenModel: {fileID: 0}
+  OnDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &22036733
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7713,6 +7716,7 @@ MonoBehaviour:
 
     Destroy all connected fuses to open the
     door.'
+  bossToWake: {fileID: 0}
 --- !u!65 &251046709
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8310,6 +8314,7 @@ MonoBehaviour:
 
 
     Only effective against FROZEN targets!'
+  bossToWake: {fileID: 0}
 --- !u!65 &285312074
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -29295,6 +29300,52 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 816839028834127517, guid: 56553c59a52bf504aaac866c7f4030cd, type: 3}
   m_PrefabInstance: {fileID: 356382883}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1020316916
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1020316918}
+  - component: {fileID: 1020316917}
+  m_Layer: 0
+  m_Name: LightingManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1020316917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020316916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bae037b7a5d1bd4781e75c796a20b90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FactoryPowerManager
+  powerOutagePopup: {fileID: 0}
+  blackoutColor: {r: 0.23529412, g: 0.23529412, b: 0.23529412, a: 1}
+--- !u!4 &1020316918
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020316916}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -147.21808, y: 9.47155, z: 88.43616}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1020897701 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7776224926991852634, guid: 30023cc824132bd4bb6a2cd831be15ba, type: 3}
@@ -36244,6 +36295,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8660585271137405669, guid: a481acdedee58d04aa1ddfe33e937ea7, type: 3}
   m_PrefabInstance: {fileID: 1317874600}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1322892568 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8616474985601507132, guid: a1c3fdb86a0adcd46ab019295d74504c, type: 3}
+  m_PrefabInstance: {fileID: 1336374577}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1325664691
 GameObject:
   m_ObjectHideFlags: 0
@@ -36791,6 +36847,9 @@ MonoBehaviour:
   maxHealth: 3
   normalModel: {fileID: 0}
   frozenModel: {fileID: 0}
+  OnDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &1336374577
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36890,7 +36949,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8616474985601507132, guid: a1c3fdb86a0adcd46ab019295d74504c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1959327383}
   m_SourcePrefab: {fileID: 100100000, guid: a1c3fdb86a0adcd46ab019295d74504c, type: 3}
 --- !u!4 &1343386291 stripped
 Transform:
@@ -37427,7 +37489,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5902035431514251905, guid: 09b29d695a5ed074597c3e8840fa550a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5
+      value: 20.01
       objectReference: {fileID: 0}
     - target: {fileID: 5902035431514251905, guid: 09b29d695a5ed074597c3e8840fa550a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -44568,6 +44630,9 @@ MonoBehaviour:
   maxHealth: 3
   normalModel: {fileID: 0}
   frozenModel: {fileID: 0}
+  OnDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &1691820142
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45200,6 +45265,7 @@ MonoBehaviour:
     Sprint \n[MOUSE] - Move Drone\n\nHUD GUIDE: \nORANGE BAR (Heat): Sprinting generates
     Heat. If Heat is maxed, you take damage. \nBLUE BAR (Frost): Frost generates
     over time.\n\n[LMB] COOLING BEAM:\nFires at YOU to reduce your Heat level. "
+  bossToWake: {fileID: 0}
 --- !u!65 &1704286668
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -50508,6 +50574,9 @@ MonoBehaviour:
   maxHealth: 3
   normalModel: {fileID: 0}
   frozenModel: {fileID: 0}
+  OnDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &1930659544
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -52047,6 +52116,36 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4740187591688056111, guid: a1c3fdb86a0adcd46ab019295d74504c, type: 3}
   m_PrefabInstance: {fileID: 1336374577}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1959327383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1322892568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad0479d352a0cda4b96638acd2028734, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DestroyableObject
+  maxHealth: 3
+  normalModel: {fileID: 0}
+  frozenModel: {fileID: 0}
+  OnDestroyed:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1020316917}
+        m_TargetAssemblyTypeName: FactoryPowerManager, Assembly-CSharp
+        m_MethodName: RestorePower
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &1962876689
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -57596,6 +57695,21 @@ MonoBehaviour:
   maxHealth: 3
   normalModel: {fileID: 0}
   frozenModel: {fileID: 0}
+  OnDestroyed:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1020316917}
+        m_TargetAssemblyTypeName: FactoryPowerManager, Assembly-CSharp
+        m_MethodName: TriggerBlackout
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2119574704 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4803152473607383218, guid: 3f142f7e5a2e48d48a437004568bcb81, type: 3}
@@ -59186,7 +59300,7 @@ PrefabInstance:
       objectReference: {fileID: 1913261778}
     - target: {fileID: 9171781115664492331, guid: a21b53dee65b6ca4295d9bd9f3aba65e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 22.150002
+      value: 37.160004
       objectReference: {fileID: 0}
     - target: {fileID: 9171781115664492331, guid: a21b53dee65b6ca4295d9bd9f3aba65e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -59244,7 +59358,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3543492795009567878, guid: 13dfbafd651f8fc4e9b867cd8a3bf508, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 22.150002
+      value: 37.160004
       objectReference: {fileID: 0}
     - target: {fileID: 3543492795009567878, guid: 13dfbafd651f8fc4e9b867cd8a3bf508, type: 3}
       propertyPath: m_LocalPosition.y
@@ -59607,11 +59721,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3602735934605212420, guid: f017369ea35a77a4ca7f6dc19688557a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.7275968
+      value: 21.737598
       objectReference: {fileID: 0}
     - target: {fileID: 3602735934605212420, guid: f017369ea35a77a4ca7f6dc19688557a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.61251163
+      value: 0.6125117
       objectReference: {fileID: 0}
     - target: {fileID: 3602735934605212420, guid: f017369ea35a77a4ca7f6dc19688557a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -61026,7 +61140,7 @@ PrefabInstance:
       objectReference: {fileID: 819274592}
     - target: {fileID: 1836922233920674274, guid: 3fe6d25b7c70b604fa52d376ed11916a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 10.5
+      value: 25.51
       objectReference: {fileID: 0}
     - target: {fileID: 1836922233920674274, guid: 3fe6d25b7c70b604fa52d376ed11916a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -62028,3 +62142,4 @@ SceneRoots:
   - {fileID: 1453624303}
   - {fileID: 1112421485}
   - {fileID: 2057926185}
+  - {fileID: 1020316918}
