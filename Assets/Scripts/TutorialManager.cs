@@ -9,10 +9,11 @@ public class TutorialManager : MonoBehaviour
     [Header("UI References")]
     public GameObject tutorialPanel;
     public TextMeshProUGUI tutorialText;
+    
+    // NEW: Reference to the FX script
+    public SciFiPanelFX visualEffects; 
 
     private bool isTutorialActive = false;
-    
-    // NEW: Variable to store "What to do next"
     private System.Action onTutorialClosed;
 
     void Awake()
@@ -29,6 +30,7 @@ public class TutorialManager : MonoBehaviour
     {
         if (isTutorialActive)
         {
+            // We use unscaled time logic here because TimeScale is 0
             if (Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.numpadEnterKey.wasPressedThisFrame)
             {
                 DismissTutorial();
@@ -36,7 +38,6 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    // UPDATED: Now accepts an optional "onDismiss" action
     public void ShowTutorial(string message, System.Action onDismiss = null)
     {
         if (tutorialPanel == null) return;
@@ -44,9 +45,16 @@ public class TutorialManager : MonoBehaviour
         tutorialText.text = message;
         tutorialPanel.SetActive(true);
         
+        // NEW: Trigger the Sci-Fi Animation
+        if (visualEffects != null)
+        {
+            visualEffects.PlayOpenAnimation();
+        }
+
         // Save the action for later
         this.onTutorialClosed = onDismiss;
 
+        // Pause the game
         Time.timeScale = 0f; 
         isTutorialActive = true;
     }
@@ -57,11 +65,11 @@ public class TutorialManager : MonoBehaviour
         Time.timeScale = 1f; 
         isTutorialActive = false;
         
-        // NEW: Execute the stored action (Wake up the boss!)
+        // Execute the stored action (Wake up the boss!)
         if (onTutorialClosed != null)
         {
             onTutorialClosed.Invoke();
-            onTutorialClosed = null; // Clear it so it doesn't run again
+            onTutorialClosed = null; 
         }
     }
 }
