@@ -26682,11 +26682,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400004, guid: 401656ee5d01d524e8c8caf3d47e2be9, type: 3}
   m_PrefabInstance: {fileID: 66312121}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &814599307 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5902035431514095267, guid: 09b29d695a5ed074597c3e8840fa550a, type: 3}
-  m_PrefabInstance: {fileID: 1391665640}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &815530088
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26774,28 +26769,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5902035431514251905, guid: 09b29d695a5ed074597c3e8840fa550a, type: 3}
   m_PrefabInstance: {fileID: 1391665640}
   m_PrefabAsset: {fileID: 0}
---- !u!195 &819274596
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 814599307}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!4 &823485718 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 816839028834127517, guid: 56553c59a52bf504aaac866c7f4030cd, type: 3}
@@ -42975,6 +42948,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5217796075736691201, guid: 09b29d695a5ed074597c3e8840fa550a, type: 3}
+      propertyPath: m_Center.y
+      value: 0.9
+      objectReference: {fileID: 0}
     - target: {fileID: 5902035431514095267, guid: 09b29d695a5ed074597c3e8840fa550a, type: 3}
       propertyPath: m_Name
       value: Robot
@@ -43029,10 +43006,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5902035431514251905, guid: 09b29d695a5ed074597c3e8840fa550a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1913261778}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5902035431514095267, guid: 09b29d695a5ed074597c3e8840fa550a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 819274596}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 09b29d695a5ed074597c3e8840fa550a, type: 3}
 --- !u!4 &1392261231 stripped
 Transform:
