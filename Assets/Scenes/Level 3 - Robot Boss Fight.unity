@@ -58000,9 +58000,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7122333679298324770, guid: b6bec4aa8990cc74ab0db9cd51ca7c09, type: 3}
+      propertyPath: debrisPieces
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7122333679298324770, guid: b6bec4aa8990cc74ab0db9cd51ca7c09, type: 3}
       propertyPath: destroySound
       value: 
       objectReference: {fileID: 8300000, guid: 531e31fcf1b53894d94097db4665ce6e, type: 3}
+    - target: {fileID: 7122333679298324770, guid: b6bec4aa8990cc74ab0db9cd51ca7c09, type: 3}
+      propertyPath: freezeDuration
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 7122333679298324770, guid: b6bec4aa8990cc74ab0db9cd51ca7c09, type: 3}
       propertyPath: OnDestroyed.m_PersistentCalls.m_Calls.Array.size
       value: 1
