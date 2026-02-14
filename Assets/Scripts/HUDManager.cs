@@ -3,30 +3,29 @@ using UnityEngine.UI;
 
 public class HUDManager : MonoBehaviour
 {
-    [Header("UI References")]
-    [Tooltip("Drag the Red 'Heat' Fill Image here")]
-    public Image heatBarFill;
-    [Tooltip("Drag the Blue 'Freeze' Fill Image here")]
-    public Image freezeBarFill;
+    public static HUDManager Instance;
 
-    [Header("Heat Visual Settings")]
+    [Header("Heat Bar Settings")]
+    public Slider heatSlider;       // Drag the slider component here
+    public Image heatFillImage;     // Drag the "Fill" image inside the slider here (for color changing)
+    
+    [Header("Heat Visuals")]
     public Color normalHeatColor = new Color(1f, 0.5f, 0f); // Orange
     public Color criticalHeatColor = Color.red;
-    [Tooltip("Heat percentage (0-1) where flashing starts")]
     [Range(0f, 1f)] public float heatCriticalThreshold = 0.8f;
     [SerializeField] float flashSpeed = 10f;
 
-    [Header("Freeze Visual Settings")]
+    [Header("Frost Bar Settings")]
+    public Slider frostSlider;      // Drag the slider component here
+    public Image frostFillImage;    // Drag the "Fill" image inside the slider here
+    
+    [Header("Frost Visuals")]
     public Color normalFreezeColor = Color.cyan;
     public Color lowEnergyColor = Color.gray;
-    [Tooltip("Energy percentage (0-1) where bar looks empty")]
     [Range(0f, 1f)] public float energyLowThreshold = 0.2f;
 
-    // Singleton instance for easy access
-    public static HUDManager Instance;
-
     [Header("Boss UI")]
-    public GameObject bossHealthContainer; // The Background Object (to show/hide)
+    public GameObject bossHealthContainer;
     public Image bossHealthFill;
 
     void Awake()
@@ -37,40 +36,50 @@ public class HUDManager : MonoBehaviour
 
     public void UpdateHeatBar(float currentHeat, float maxHeat)
     {
-        if (heatBarFill != null)
+        // 1. Update the Slider Value
+        if (heatSlider != null)
+        {
+            heatSlider.value = currentHeat / maxHeat;
+        }
+
+        // 2. Update the Color (Flashing Effect)
+        if (heatFillImage != null)
         {
             float ratio = currentHeat / maxHeat;
-            heatBarFill.fillAmount = ratio;
-
-            // Visual Logic: Flash if critical
             if (ratio >= heatCriticalThreshold)
             {
-                // PingPong creates a back-and-forth value between 0 and 1 over time
+                // PingPong creates a flashing effect
                 float flash = Mathf.PingPong(Time.time * flashSpeed, 1f);
-                heatBarFill.color = Color.Lerp(normalHeatColor, criticalHeatColor, flash);
+                heatFillImage.color = Color.Lerp(normalHeatColor, criticalHeatColor, flash);
             }
             else
             {
-                heatBarFill.color = normalHeatColor;
+                heatFillImage.color = normalHeatColor;
             }
         }
     }
 
     public void UpdateFreezeBar(float currentEnergy, float maxEnergy)
     {
-        if (freezeBarFill != null)
+        // 1. Update the Slider Value
+        if (frostSlider != null)
+        {
+            frostSlider.value = currentEnergy / maxEnergy;
+        }
+
+        // 2. Update the Color (Dimming Effect)
+        if (frostFillImage != null)
         {
             float ratio = currentEnergy / maxEnergy;
-            freezeBarFill.fillAmount = ratio;
-
-            // Visual Logic: Dim if low energy to show "Recharging" state
-            if (ratio <= energyLowThreshold)
+            
+            // If energy is very low, turn gray to indicate "Recharging"
+            if (ratio <= energyLowThreshold && ratio > 0.01f)
             {
-                freezeBarFill.color = Color.Lerp(lowEnergyColor, normalFreezeColor, ratio / energyLowThreshold);
+                frostFillImage.color = Color.Lerp(lowEnergyColor, normalFreezeColor, ratio / energyLowThreshold);
             }
             else
             {
-                freezeBarFill.color = normalFreezeColor;
+                frostFillImage.color = normalFreezeColor;
             }
         }
     }
