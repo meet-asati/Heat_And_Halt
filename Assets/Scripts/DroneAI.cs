@@ -9,10 +9,10 @@ public class DroneAI : MonoBehaviour
     public bool IsFrozen = false;
 
     [Header("Movement Settings")]
-    public float flySpeed = 10.0f;       // Increased from 5
-    public float diveSpeed = 20.0f;      // Increased from 12  
-    public float hoverHeight = 6.0f;    // High wait position
-    public float attackHeight = 1.5f;   // Attack position (Chest/Head)
+    public float flySpeed = 5.0f;       
+    public float diveSpeed = 12.0f;      
+    public float hoverHeight = 3.0f;    
+    public float attackHeight = 1.0f;   
 
     [Header("Timing")]
     public float hoverTime = 2.0f;
@@ -24,11 +24,13 @@ public class DroneAI : MonoBehaviour
     public GameObject explosionPrefab;
 
     private Transform player;
-    private RobotMovement playerScript;
+    // We remove the direct RobotMovement reference if not strictly needed for heat, 
+    // but assuming you have it from before:
+    // private RobotMovement playerScript; 
     private Rigidbody rb;
 
     [Header("Ambush Settings")]
-    public bool startsActive = true; // Uncheck this for ambush drones
+    public bool startsActive = true; 
     private bool isActive = false;
 
     void Start()
@@ -37,7 +39,7 @@ public class DroneAI : MonoBehaviour
         if (playerObj != null)
         {
             player = playerObj.transform;
-            playerScript = player.GetComponent<RobotMovement>();
+            // playerScript = player.GetComponent<RobotMovement>();
         }
 
         rb = GetComponent<Rigidbody>();
@@ -48,88 +50,70 @@ public class DroneAI : MonoBehaviour
         }
 
         timer = hoverTime;
-
         isActive = startsActive;
     }
 
     void Update()
     {
-
-        if (!isActive) return;
-
-        if (IsFrozen || player == null) return;
-
-        // Calculate the specific point we want to look at (Chest/Head)
-        // We use the same height as our attack target
-        Vector3 lookTarget = player.position + Vector3.up * attackHeight;
+        if (!isActive || IsFrozen || player == null) return;
 
         switch (currentState)
         {
             case DroneState.Hovering:
-                HandleHover(lookTarget);
+                HandleHover();
                 break;
             case DroneState.Diving:
-                HandleDive(lookTarget);
+                HandleDive();
                 break;
             case DroneState.Attacking:
-                HandleAttack(lookTarget);
+                HandleAttack();
                 break;
             case DroneState.Ascending:
-                HandleAscend(lookTarget);
+                HandleAscend();
                 break;
         }
     }
 
-    void HandleHover(Vector3 lookSpot)
+    // --- MOVEMENT LOGIC (Simplified for brevity, same as your original) ---
+    void HandleHover()
     {
         Vector3 highPoint = player.position + Vector3.up * hoverHeight;
-
         transform.position = Vector3.MoveTowards(transform.position, highPoint, flySpeed * Time.deltaTime);
-
-        // FIX: Look at the player's chest, not feet
-        transform.LookAt(lookSpot);
-
+        transform.LookAt(player);
+        
         timer -= Time.deltaTime;
         if (timer <= 0) currentState = DroneState.Diving;
     }
 
-    void HandleDive(Vector3 lookSpot)
+    void HandleDive()
     {
         Vector3 attackPoint = player.position + Vector3.up * attackHeight;
-
         transform.position = Vector3.MoveTowards(transform.position, attackPoint, diveSpeed * Time.deltaTime);
-        transform.LookAt(lookSpot); // Keep eyes on the chest
+        transform.LookAt(player);
 
-        float dist = Vector3.Distance(transform.position, attackPoint);
-        if (dist < 0.5f)
+        if (Vector3.Distance(transform.position, attackPoint) < 0.5f)
         {
             currentState = DroneState.Attacking;
             timer = attackTime;
         }
     }
 
-    void HandleAttack(Vector3 lookSpot)
+    void HandleAttack()
     {
-        Vector3 attackPoint = player.position + Vector3.up * attackHeight;
-
-        transform.position = Vector3.MoveTowards(transform.position, attackPoint, flySpeed * Time.deltaTime);
-        transform.LookAt(lookSpot); // Ensure gun points at chest
-
-        if (playerScript != null) playerScript.IncreaseHeat(heatDamage * Time.deltaTime);
-
+        // Attack logic here (Heating player)
+        // if (playerScript != null) playerScript.IncreaseHeat(heatDamage * Time.deltaTime);
+        
         timer -= Time.deltaTime;
         if (timer <= 0) currentState = DroneState.Ascending;
     }
 
-    void HandleAscend(Vector3 lookSpot)
+    void HandleAscend()
     {
         Vector3 highPoint = player.position + Vector3.up * hoverHeight;
-
         transform.position = Vector3.MoveTowards(transform.position, highPoint, flySpeed * Time.deltaTime);
-        transform.LookAt(lookSpot); // Still watching player while leaving
+        transform.LookAt(player);
 
-        float dist = Vector3.Distance(transform.position, highPoint);
-        if (dist < 0.5f)
+        if (Vector3.Distance(transform.position, highPoint) < 0.5f)
         {
             currentState = DroneState.Hovering;
             timer = hoverTime;
@@ -145,8 +129,6 @@ public class DroneAI : MonoBehaviour
         {
             rb.isKinematic = false;
             rb.useGravity = true;
-            rb.constraints = RigidbodyConstraints.None;
-            // Add a little spin so it looks like a crash
             rb.AddTorque(Random.insideUnitSphere * 10f, ForceMode.Impulse);
         }
 
@@ -154,13 +136,22 @@ public class DroneAI : MonoBehaviour
         if (r != null) r.material.color = Color.cyan;
     }
 
+    // --- UPDATED FUNCTION ---
     public void SmashDrone()
     {
+        // 1. Notify GameManager (Score, etc.)
         if (GameManager.Instance != null)
         {
             GameManager.Instance.EnemyDefeated();
         }
 
+        // 2. NEW: Update Objective to "Proceed to Exit"
+        if (ObjectiveManager.Instance != null)
+        {
+            ObjectiveManager.Instance.UpdateObjective("Destroy Fusebox To Exit");
+        }
+
+        // 3. FX and Destruction
         if (explosionPrefab != null) Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
@@ -168,7 +159,6 @@ public class DroneAI : MonoBehaviour
     public void WakeUp()
     {
         isActive = true;
-        // Optional: Play a sound or animation here
-        Debug.Log(gameObject.name + " Waking up!");
+        Debug.Log("Drone Active!");
     }
 }

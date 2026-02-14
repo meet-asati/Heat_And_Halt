@@ -6,8 +6,11 @@ public class TutorialTrigger : MonoBehaviour
     [TextArea(3, 10)] 
     public string message;
 
+    [Header("Objective Update")]
+    public bool updatesObjective = false;
+    public string newObjectiveText;
+
     [Header("Optional: Boss Trigger")]
-    [Tooltip("Drag the BossAI object here if this tutorial starts a fight.")]
     public BossAI bossToWake; 
 
     private void OnTriggerEnter(Collider other)
@@ -16,17 +19,18 @@ public class TutorialTrigger : MonoBehaviour
         {
             if (TutorialManager.Instance != null)
             {
-                // We pass a "Lambda Function" () => { ... } as the second argument
                 TutorialManager.Instance.ShowTutorial(message, () => 
                 {
-                    // This code runs AFTER the user presses Enter
-                    if (bossToWake != null) 
+                    // Triggers AFTER 'Enter' is pressed
+                    if (bossToWake != null) bossToWake.WakeUp();
+                    
+                    // NEW: Update Objective
+                    if (updatesObjective && ObjectiveManager.Instance != null)
                     {
-                        bossToWake.WakeUp();
+                        ObjectiveManager.Instance.UpdateObjective(newObjectiveText);
                     }
                 });
             }
-
             Destroy(gameObject); 
         }
     }

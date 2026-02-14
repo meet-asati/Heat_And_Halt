@@ -469,6 +469,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1679083014}
+        m_TargetAssemblyTypeName: ObjectiveManager, Assembly-CSharp
+        m_MethodName: UpdateObjective
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Proceed to exit door
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!82 &20818585
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5953,8 +5965,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1683266638}
   - {fileID: 20818580}
+  - {fileID: 1683266638}
   - {fileID: 1959327379}
   m_Father: {fileID: 510399276}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8740,6 +8752,8 @@ MonoBehaviour:
 
 
     Destroy all Obstacles and Fuseboxes to open the door.'
+  updatesObjective: 1
+  newObjectiveText: Destroy objects and fusebox
   bossToWake: {fileID: 0}
 --- !u!65 &251046709
 BoxCollider:
@@ -9733,6 +9747,8 @@ MonoBehaviour:
 
 
     Only effective against FROZEN targets!'
+  updatesObjective: 1
+  newObjectiveText: Destroy the enemy drone
   bossToWake: {fileID: 0}
 --- !u!65 &285312074
 BoxCollider:
@@ -14953,7 +14969,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 27.17627, y: 0, z: -1366.4578, w: -40.984253}
+  m_margin: {x: 27.17627, y: 0, z: -2031.1211, w: -40.984253}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -28688,7 +28704,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5646446941884083483, guid: c939b063ae81b564d9cab286b0eb6abd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1679083014}
   m_SourcePrefab: {fileID: 100100000, guid: c939b063ae81b564d9cab286b0eb6abd, type: 3}
 --- !u!1 &904992636
 GameObject:
@@ -50302,6 +50321,29 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!1 &1679083010 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5646446941884083483, guid: c939b063ae81b564d9cab286b0eb6abd, type: 3}
+  m_PrefabInstance: {fileID: 903887619}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1679083014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1679083010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0208e6c979a269a419a4e7d60b46f504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectiveManager
+  objectiveTextUI: {fileID: 432772057}
+  startObj: Move Forward
+  destroyObj: Destroy objects and fusebox
+  restoreObj: Restore Electricity
+  exitObj: Proceed to exit door
+  droneObj: Destroy the enemy drone
 --- !u!1 &1681008085
 GameObject:
   m_ObjectHideFlags: 0
@@ -51508,6 +51550,8 @@ MonoBehaviour:
     Sprint \n[MOUSE] - Move Drone\n\nHUD GUIDE: \nORANGE BAR (Heat): Sprinting generates
     Heat. If Heat is maxed, you take damage. \nBLUE BAR (Frost): Frost generates
     over time.\n\n[LMB] COOLING BEAM:\nFires at YOU to reduce your Heat level. "
+  updatesObjective: 0
+  newObjectiveText: 
   bossToWake: {fileID: 0}
 --- !u!65 &1704286668
 BoxCollider:
@@ -59302,6 +59346,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1679083014}
+        m_TargetAssemblyTypeName: ObjectiveManager, Assembly-CSharp
+        m_MethodName: UpdateObjective
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Proceed To Exit Door
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!82 &1959327387
 AudioSource:
   m_ObjectHideFlags: 0
@@ -66219,6 +66275,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1679083014}
+        m_TargetAssemblyTypeName: ObjectiveManager, Assembly-CSharp
+        m_MethodName: UpdateObjective
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Restore Electricity
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!82 &2117571509
