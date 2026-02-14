@@ -28701,7 +28701,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3100690205310784158, guid: c939b063ae81b564d9cab286b0eb6abd, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -50984,7 +50985,6 @@ MonoBehaviour:
   arrowPaths:
   - {fileID: 397390157}
   - {fileID: 582394389}
-  completeMessage: LEVEL COMPLETE. Proceed to Exit.
 --- !u!4 &1693444297
 Transform:
   m_ObjectHideFlags: 0

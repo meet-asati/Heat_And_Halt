@@ -12,7 +12,7 @@ public class DestroyableObject : MonoBehaviour
     [Header("Visuals")]
     public GameObject normalModel;
     public GameObject frozenModel;
-    
+
     [Header("Freeze Settings")]
     public float freezeDuration = 5.0f; // Time in seconds for the color to change
     public Color frozenColor = Color.cyan; // The target color when frozen
@@ -93,7 +93,7 @@ public class DestroyableObject : MonoBehaviour
             // Ensure we land exactly on the target color
             myRenderer.material.color = frozenColor;
         }
-        
+
         // PATH B: If using Model Swapping (Optional support)
         // We do this AFTER the duration so the fade (if any) happens first
         if (normalModel != null && frozenModel != null)
@@ -148,7 +148,7 @@ public class DestroyableObject : MonoBehaviour
             tempAudio.transform.position = transform.position;
             AudioSource tempSource = tempAudio.AddComponent<AudioSource>();
             tempSource.clip = clipToPlay;
-            tempSource.volume = 2.0f; 
+            tempSource.volume = 2.0f;
             tempSource.spatialBlend = 1.0f;
             tempSource.minDistance = 5f;
             tempSource.Play();
@@ -166,42 +166,47 @@ public class DestroyableObject : MonoBehaviour
 
     void SpawnProceduralDebris()
     {
-        // Create a temporary parent container for organization
         GameObject debrisHolder = new GameObject("Debris_" + gameObject.name);
         debrisHolder.transform.position = transform.position;
 
         Vector3 originalScale = transform.localScale;
 
+        // 1. Get the Player's Collider (Assuming player has tag "Player")
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        Collider playerCollider = player != null ? player.GetComponent<Collider>() : null;
+
         for (int i = 0; i < debrisPieces; i++)
         {
-            // Create a primitive cube
             GameObject piece = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            
-            // Randomly position it inside the object's volume
+
+            // Random position & rotation
             piece.transform.position = transform.position + Random.insideUnitSphere * 0.5f;
             piece.transform.rotation = Random.rotation;
-            
-            // Scale it down (roughly 1/3rd size of the original)
-            piece.transform.localScale = originalScale * 0.05f;
-            
-            // Match the color (It will now be the Frozen Color!)
+
+            // Scale
+            piece.transform.localScale = originalScale * 0.1f; // Small size
+
+            // Color
             if (myRenderer != null)
             {
                 piece.GetComponent<Renderer>().material.color = myRenderer.material.color;
             }
 
-            // Add Physics
+            // Physics
             Rigidbody rb = piece.AddComponent<Rigidbody>();
             rb.mass = 0.5f;
-            
-            // Apply Explosion Force
             rb.AddExplosionForce(explosionForce, transform.position, explosionRadius);
 
-            // Parent to holder
+            // --- THE TRICK ---
+            // We keep the collider so it hits the floor, but we ignore the player
+            if (playerCollider != null)
+            {
+                Physics.IgnoreCollision(piece.GetComponent<Collider>(), playerCollider);
+            }
+
             piece.transform.parent = debrisHolder.transform;
         }
 
-        // Clean up debris after 4 seconds
         Destroy(debrisHolder, 4f);
     }
 }

@@ -11,8 +11,8 @@ public class MissionManager : MonoBehaviour
     [Tooltip("Drag the parent Arrow Objects here. Element 0 leads to Objective 0, etc.")]
     public List<GameObject> arrowPaths;
 
-    [Header("Level Settings")]
-    [TextArea] public string completeMessage = "LEVEL COMPLETE. Proceed to Exit.";
+    // [Header("Level Settings")]
+    // [TextArea] public string completeMessage = "LEVEL COMPLETE. Proceed to Exit.";
     
     // Internal State
     private int currentIndex = 0;
@@ -32,7 +32,7 @@ public class MissionManager : MonoBehaviour
         }
         
         // 3. Show Tutorial for the first objective
-        ShowCurrentTutorial();
+        // ShowCurrentTutorial();
     }
 
     void Update()
@@ -62,14 +62,14 @@ public class MissionManager : MonoBehaviour
         // 2. Increment Step
         currentIndex++;
 
-        // 3. Check if Level is Done
-        if (currentIndex >= objectives.Count)
-        {
-            Debug.Log("Mission Complete!");
-            if (TutorialManager.Instance != null)
-                TutorialManager.Instance.ShowTutorial(completeMessage);
-            return;
-        }
+        // // 3. Check if Level is Done
+        // if (currentIndex >= objectives.Count)
+        // {
+        //     Debug.Log("Mission Complete!");
+        //     if (TutorialManager.Instance != null)
+        //         TutorialManager.Instance.ShowTutorial(completeMessage);
+        //     return;
+        // }
 
         // 4. Show the New Path
         if (currentIndex < arrowPaths.Count && arrowPaths[currentIndex] != null)
