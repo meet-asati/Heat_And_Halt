@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro; // Required for Text Mesh Pro
 
 public class HUDManager : MonoBehaviour
 {
@@ -14,6 +15,10 @@ public class HUDManager : MonoBehaviour
     public Color criticalHeatColor = Color.red;
     [Range(0f, 1f)] public float heatCriticalThreshold = 0.8f;
     [SerializeField] float flashSpeed = 10f;
+
+    [Header("Warning Text")]
+    public TextMeshProUGUI heatWarningText; // Drag your TextMeshPro object here
+    [SerializeField] float textBlinkSpeed = 8f; // How fast the text flashes
 
     [Header("Frost Bar Settings")]
     public Slider frostSlider;      // Drag the slider component here
@@ -37,16 +42,18 @@ public class HUDManager : MonoBehaviour
 
     public void UpdateHeatBar(float currentHeat, float maxHeat)
     {
+        float ratio = 0f;
+        if (maxHeat > 0) ratio = currentHeat / maxHeat;
+
         // 1. Update the Slider Value
         if (heatSlider != null)
         {
-            heatSlider.value = currentHeat / maxHeat;
+            heatSlider.value = ratio;
         }
 
-        // 2. Update the Color (Flashing Effect)
+        // 2. Update the Color (Flashing Effect on Bar)
         if (heatFillImage != null)
         {
-            float ratio = currentHeat / maxHeat;
             if (ratio >= heatCriticalThreshold)
             {
                 // PingPong creates a flashing effect
@@ -56,6 +63,31 @@ public class HUDManager : MonoBehaviour
             else
             {
                 heatFillImage.color = normalHeatColor;
+            }
+        }
+
+        // 3. Update Warning Text (Flash if > 80%)
+        if (heatWarningText != null)
+        {
+            if (ratio > 0.8f) // Hardcoded 80% per request, or use heatCriticalThreshold
+            {
+                // Ensure text is visible
+                if (!heatWarningText.gameObject.activeSelf) 
+                    heatWarningText.gameObject.SetActive(true);
+
+                // Flash the Alpha (Transparency)
+                float alpha = Mathf.PingPong(Time.time * textBlinkSpeed, 1f);
+                
+                // Keep original color, just change alpha
+                Color warningColor = heatWarningText.color;
+                warningColor.a = alpha;
+                heatWarningText.color = warningColor;
+            }
+            else
+            {
+                // Hide text when safe
+                if (heatWarningText.gameObject.activeSelf) 
+                    heatWarningText.gameObject.SetActive(false);
             }
         }
     }

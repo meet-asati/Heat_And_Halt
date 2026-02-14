@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 [RequireComponent(typeof(CharacterController))]
 public class RobotMovement : MonoBehaviour
@@ -23,6 +24,8 @@ public class RobotMovement : MonoBehaviour
     private Animator robotAnimator;
     private CharacterController characterController;
     private Vector3 verticalVelocity;
+    private Vector3 startPosition; // To remember where we started for respawn
+    private Quaternion startRotation; // To remember rotation
 
     [Header("Combat Settings")]
     [Tooltip("Time in seconds to lock movement during attack (match your animation length)")]
@@ -42,6 +45,10 @@ public class RobotMovement : MonoBehaviour
         robotAnimator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
         CurrentHeat = 0f;
+
+        // Save starting transform for respawn
+        startPosition = transform.position;
+        startRotation = transform.rotation;
     }
 
     void Update()
@@ -53,8 +60,6 @@ public class RobotMovement : MonoBehaviour
         {
             Die();
         }
-
-        // --- FIX: Removed "isAttacking = false;" here. This was the bug causing movement while fighting. ---
 
         if (Keyboard.current == null) return;
 
@@ -88,7 +93,6 @@ public class RobotMovement : MonoBehaviour
         }
 
         // --- 3. Handle Rotation ---
-        // We allow rotation only if moving or explicitly turning (optional: you can disable this during attack too if you want)
         if (turnInput != 0 && !isAttacking)
         {
             float rotationAmount = turnInput * turnSpeed * Time.deltaTime;
@@ -100,7 +104,6 @@ public class RobotMovement : MonoBehaviour
         float currentSpeed = 0f;
         float animValue = 0f;
 
-        // Force inputs to zero if attacking (Safety Check)
         if (isAttacking)
         {
             moveInput = 0f;
@@ -140,7 +143,6 @@ public class RobotMovement : MonoBehaviour
             currentSpeed = reverseSpeed;
             animValue = -0.5f;
         }
-        // If moveInput is 0 (stopped or attacking), animValue stays 0
 
         // --- 5. Apply Movement ---
         Vector3 move = Vector3.zero;
@@ -150,7 +152,7 @@ public class RobotMovement : MonoBehaviour
             move = transform.forward * moveInput * currentSpeed;
         }
 
-        // Apply Gravity (Always apply gravity, even when attacking, so you don't float)
+        // Apply Gravity
         if (characterController.isGrounded && verticalVelocity.y < 0)
         {
             verticalVelocity.y = -2f;
@@ -162,7 +164,6 @@ public class RobotMovement : MonoBehaviour
         // --- 6. Update Animator ---
         if (robotAnimator != null)
         {
-            // If attacking, force the speed parameter to 0 immediately so legs stop moving
             if (isAttacking)
             {
                 robotAnimator.SetFloat("Speed", 0f);
@@ -182,33 +183,24 @@ public class RobotMovement : MonoBehaviour
 
     System.Collections.IEnumerator PerformAttack()
     {
-        isAttacking = true; // Lock movement
+        isAttacking = true; 
         
-        // VISUAL FIX: Immediately stop the walking animation
         if(robotAnimator != null) robotAnimator.SetFloat("Speed", 0f);
 
         robotAnimator.SetTrigger("Fight");
 
-        // Wait for the impact point of the animation (adjust 0.3f to match your specific punch)
         yield return new WaitForSeconds(0.3f);
 
-        // --- Hitbox Logic ---
         Vector3 attackCenter = transform.position;
         float attackRadius = 10.0f; 
-
-        // Lower the center slightly to hit small enemies on the floor
         Vector3 floorCenter = transform.position + Vector3.down * 0.5f;
         Collider[] hitEnemies = Physics.OverlapSphere(floorCenter, attackRadius, enemyLayer);
 
-        Debug.Log($"Smash! Found {hitEnemies.Length} enemies in range.");
-
         foreach (Collider enemy in hitEnemies)
         {
-            // 1. Generic Destroyable Objects
             DestroyableObject destObj = enemy.GetComponent<DestroyableObject>();
             if (destObj != null) destObj.TakeDamage(1);
 
-            // 2. Drones
             DroneAI drone = enemy.GetComponent<DroneAI>();
             if (drone == null) drone = enemy.GetComponentInParent<DroneAI>();
 
@@ -217,7 +209,6 @@ public class RobotMovement : MonoBehaviour
                 drone.SmashDrone();
             }
 
-            // 3. Boss
             BossAI boss = enemy.GetComponent<BossAI>();
             if (boss != null)
             {
@@ -225,17 +216,15 @@ public class RobotMovement : MonoBehaviour
             }
         }
 
-        // Wait for the rest of the animation to finish
         yield return new WaitForSeconds(attackDuration - 0.3f);
         
-        isAttacking = false; // Unlock movement
+        isAttacking = false; 
     }
 
     public void IncreaseHeat(float amount)
     {
         CurrentHeat += amount;
         if (CurrentHeat > maxHeat) CurrentHeat = maxHeat;
-        Debug.Log($"Heat Increased! Current: {CurrentHeat}");
     }
 
     void OnDrawGizmosSelected()
@@ -256,6 +245,7 @@ public class RobotMovement : MonoBehaviour
             Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         }
 
+        // Hide the robot visuals
         Renderer[] renderers = GetComponentsInChildren<Renderer>();
         foreach (Renderer r in renderers) r.enabled = false;
 
@@ -263,5 +253,60 @@ public class RobotMovement : MonoBehaviour
         {
             GameManager.Instance.TriggerMeltdown();
         }
+
+        // --- AUTOMATIC RESPAWN TRIGGER ---
+        StartCoroutine(RespawnRoutine(3.0f));
+    }
+
+    // Coroutine to handle the wait time
+    IEnumerator RespawnRoutine(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Respawn();
+    }
+
+    // Public method to reset the robot
+    public void Respawn()
+    {
+        // 1. Reset Logic
+        isDead = false;
+        CurrentHeat = 0f;
+        isAttacking = false;
+        verticalVelocity = Vector3.zero;
+
+        // 2. IMPORTANT: Move CharacterController
+        // You MUST disable the controller to teleport it, otherwise it ignores the transform change
+        if (characterController != null)
+        {
+            characterController.enabled = false; 
+            transform.position = startPosition;
+            transform.rotation = startRotation;
+            characterController.enabled = true;
+        }
+        else
+        {
+            // Fallback if no controller
+            transform.position = startPosition;
+            transform.rotation = startRotation;
+        }
+
+        // 3. Re-enable Visuals
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        foreach (Renderer r in renderers) r.enabled = true;
+
+        // 4. Reset Animator
+        if (robotAnimator != null)
+        {
+            robotAnimator.Rebind();
+            robotAnimator.SetFloat("Speed", 0f);
+        }
+
+        // 5. Update UI
+        if (HUDManager.Instance != null)
+        {
+            HUDManager.Instance.UpdateHeatBar(CurrentHeat, maxHeat);
+        }
+
+        Debug.Log("Robot Respawned via Script.");
     }
 }
