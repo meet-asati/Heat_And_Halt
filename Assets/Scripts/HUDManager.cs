@@ -8,7 +8,7 @@ public class HUDManager : MonoBehaviour
     [Header("Heat Bar Settings")]
     public Slider heatSlider;       // Drag the slider component here
     public Image heatFillImage;     // Drag the "Fill" image inside the slider here (for color changing)
-    
+
     [Header("Heat Visuals")]
     public Color normalHeatColor = new Color(1f, 0.5f, 0f); // Orange
     public Color criticalHeatColor = Color.red;
@@ -18,7 +18,7 @@ public class HUDManager : MonoBehaviour
     [Header("Frost Bar Settings")]
     public Slider frostSlider;      // Drag the slider component here
     public Image frostFillImage;    // Drag the "Fill" image inside the slider here
-    
+
     [Header("Frost Visuals")]
     public Color normalFreezeColor = Color.cyan;
     public Color lowEnergyColor = Color.gray;
@@ -26,6 +26,7 @@ public class HUDManager : MonoBehaviour
 
     [Header("Boss UI")]
     public GameObject bossHealthContainer;
+    public Slider bossHealthSlider;
     public Image bossHealthFill;
 
     void Awake()
@@ -71,7 +72,7 @@ public class HUDManager : MonoBehaviour
         if (frostFillImage != null)
         {
             float ratio = currentEnergy / maxEnergy;
-            
+
             // If energy is very low, turn gray to indicate "Recharging"
             if (ratio <= energyLowThreshold && ratio > 0.01f)
             {
@@ -91,9 +92,9 @@ public class HUDManager : MonoBehaviour
 
     public void UpdateBossHealth(float currentHealth, float maxHealth)
     {
-        if (bossHealthFill != null)
+        if (bossHealthSlider != null)
         {
-            bossHealthFill.fillAmount = currentHealth / maxHealth;
+            bossHealthSlider.value = currentHealth / maxHealth;
         }
     }
 }
