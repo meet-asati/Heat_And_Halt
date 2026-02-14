@@ -106,17 +106,26 @@ public class DestroyableObject : MonoBehaviour
 
     void Die()
     {
-        // 4. Play Destroy Audio
-        // We use PlayClipAtPoint because the gameObject is about to be destroyed.
-        // If we used audioSource.Play(), the sound would silence immediately.
-        if (destroySound != null)
+        // 1. Play Destroy Audio with Custom Volume
+        AudioClip clipToPlay = destroySound != null ? destroySound : hitSound;
+
+        if (clipToPlay != null)
         {
-            AudioSource.PlayClipAtPoint(destroySound, transform.position);
-        }
-        else if (hitSound != null) 
-        {
-            // Fallback: If you only have one sound for both hit and break, play it here too
-            AudioSource.PlayClipAtPoint(hitSound, transform.position);
+            // Create a temporary game object to play the sound
+            GameObject tempAudio = new GameObject("TempAudio");
+            tempAudio.transform.position = transform.position;
+
+            // Add an AudioSource to it
+            AudioSource tempSource = tempAudio.AddComponent<AudioSource>();
+            tempSource.clip = clipToPlay;
+            tempSource.volume = 2.0f; // Force volume to max
+            tempSource.spatialBlend = 1.0f; // Make it 3D
+            tempSource.minDistance = 5f; // Ensures it's loud enough close up
+            
+            tempSource.Play();
+
+            // Destroy the temporary object after the clip finishes
+            Destroy(tempAudio, clipToPlay.length);
         }
 
         OnDestroyed.Invoke(); 
