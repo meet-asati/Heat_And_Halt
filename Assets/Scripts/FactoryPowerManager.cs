@@ -36,7 +36,7 @@ public class FactoryPowerManager : MonoBehaviour
             powerOutagePopup.SetActive(true);
             
             // OPTION A: Hide automatically after 5 seconds (Keep this if you want it to fade)
-            Invoke("HidePopup", 7f); 
+            Invoke("HidePopup", 12f); 
 
             // OPTION B: Keep it on screen until power is back (Delete the line above if you want this)
         }
