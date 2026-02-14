@@ -96,7 +96,7 @@ public class BossAI : MonoBehaviour
                 // NEW: Allow full movement and combat during Vent Phase
                 // Check distance to decide if we Chase or Attack
                 float dist = Vector3.Distance(transform.position, playerRobot.transform.position);
-                
+
                 if (dist <= attackRange)
                 {
                     AttackLogic(); // Allow him to punch you!
@@ -214,23 +214,32 @@ public class BossAI : MonoBehaviour
 
     public void FreezeBoss()
     {
-        if (isInvulnerable || currentState == BossState.VentPhase) return;
         if (currentState == BossState.Frozen) return;
 
-        // Transition to Frozen
         currentState = BossState.Frozen;
-        agent.isStopped = true; // Stop moving
-        CancelInvoke("DealDamage"); // Stop attacking
 
+        // --- MOVEMENT FIX START ---
+        if (agent != null && agent.isOnNavMesh)
+        {
+            agent.isStopped = true;       // Stop calculating path
+            agent.velocity = Vector3.zero; // KILL MOMENTUM INSTANTLY
+            agent.ResetPath();            // Clear the destination
+        }
+        // --- MOVEMENT FIX END ---
+
+        CancelInvoke("DealDamage");
+
+        // Visuals
         if (animator != null)
         {
             animator.SetBool("IsFrozen", true);
-            animator.ResetTrigger("Attack"); // Cancel any pending attacks
+            animator.SetFloat("Speed", 0f); // Stop walking animation
+            animator.ResetTrigger("Attack");
         }
 
-        // Visuals
-        thawTimer = freezeDuration;
         if (bossRenderer != null) bossRenderer.material.color = Color.cyan;
+
+        thawTimer = freezeDuration;
     }
 
     public void ThawBoss()
@@ -249,7 +258,7 @@ public class BossAI : MonoBehaviour
         }
 
         if (animator != null) animator.SetBool("IsFrozen", false);
-        
+
         // Reset Visuals
         if (bossRenderer != null) bossRenderer.material.color = originalColor;
     }
@@ -289,7 +298,7 @@ public class BossAI : MonoBehaviour
     {
         currentState = BossState.VentPhase;
         isInvulnerable = true;
-        
+
         // REMOVED: agent.isStopped = true;  <-- We want him moving!
         // REMOVED: animator.SetFloat("Speed", 0f); <-- We want him running!
 
@@ -299,11 +308,11 @@ public class BossAI : MonoBehaviour
 
         // 2. Visual Feedback (Red/Shielded)
         if (bossRenderer != null) bossRenderer.material.color = Color.red;
-        
+
         // 3. Optional: Speed him up for Phase 2?
         if (agent != null) agent.speed += 1.5f; // Makes him faster and scarier
 
-        if (TutorialManager.Instance != null) 
+        if (TutorialManager.Instance != null)
             TutorialManager.Instance.ShowTutorial("ARMOR LOCKED! Destroy the moving VENTS!");
     }
 
@@ -324,11 +333,11 @@ public class BossAI : MonoBehaviour
         currentState = BossState.Chasing;
 
         // Reset speed if you increased it
-        if (agent != null) agent.speed -= 1.5f; 
+        if (agent != null) agent.speed -= 1.5f;
 
         // Visuals
         if (bossRenderer != null) bossRenderer.material.color = originalColor;
-        if (TutorialManager.Instance != null) 
+        if (TutorialManager.Instance != null)
             TutorialManager.Instance.ShowTutorial("SHIELD DOWN! Freeze and Smash!");
     }
 
