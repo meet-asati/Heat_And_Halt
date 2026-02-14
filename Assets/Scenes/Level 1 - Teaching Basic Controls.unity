@@ -312,7 +312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad0479d352a0cda4b96638acd2028734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DestroyableObject
-  maxHealth: 3
+  maxHealth: 2
   normalModel: {fileID: 0}
   frozenModel: {fileID: 0}
   isIndestructible: 1
@@ -1228,7 +1228,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -927199367670048503, guid: a60140d8f404d6b4982b90bfdc858298, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1199995632}
   m_SourcePrefab: {fileID: 100100000, guid: a60140d8f404d6b4982b90bfdc858298, type: 3}
 --- !u!1001 &51446775
 PrefabInstance:
@@ -23100,6 +23103,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8660585271137405669, guid: a481acdedee58d04aa1ddfe33e937ea7, type: 3}
   m_PrefabInstance: {fileID: 792468648}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &795513008 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: a60140d8f404d6b4982b90bfdc858298, type: 3}
+  m_PrefabInstance: {fileID: 46439991}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &796914405
 GameObject:
   m_ObjectHideFlags: 0
@@ -34077,6 +34085,27 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: a60140d8f404d6b4982b90bfdc858298, type: 3}
   m_PrefabInstance: {fileID: 46439991}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &1199995632
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 795513008}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.6469839, y: 1.882567, z: 0.76466835}
+  m_Center: {x: -0.0028770776, y: 0.90868396, z: -0.11766587}
 --- !u!1 &1207617880
 GameObject:
   m_ObjectHideFlags: 0
@@ -37430,7 +37459,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad0479d352a0cda4b96638acd2028734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DestroyableObject
-  maxHealth: 3
+  maxHealth: 2
   normalModel: {fileID: 0}
   frozenModel: {fileID: 0}
   isIndestructible: 0
@@ -45562,7 +45591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad0479d352a0cda4b96638acd2028734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DestroyableObject
-  maxHealth: 3
+  maxHealth: 2
   normalModel: {fileID: 0}
   frozenModel: {fileID: 0}
   isIndestructible: 0
@@ -53416,7 +53445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad0479d352a0cda4b96638acd2028734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DestroyableObject
-  maxHealth: 3
+  maxHealth: 2
   normalModel: {fileID: 0}
   frozenModel: {fileID: 0}
   isIndestructible: 0
@@ -59080,7 +59109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad0479d352a0cda4b96638acd2028734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DestroyableObject
-  maxHealth: 3
+  maxHealth: 2
   normalModel: {fileID: 0}
   frozenModel: {fileID: 0}
   isIndestructible: 0

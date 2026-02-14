@@ -5,7 +5,7 @@ using UnityEngine.Events;
 public class DestroyableObject : MonoBehaviour
 {
     [Header("Health Settings")]
-    public int maxHealth = 3; 
+    public int maxHealth = 2; 
     private int currentHealth;
 
     [Header("Visuals (Optional)")]
