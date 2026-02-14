@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(AudioSource))] // Ensures the object has an AudioSource
 public class DoorSlide : MonoBehaviour
 {
     [Header("Animation Settings")]
@@ -10,12 +11,19 @@ public class DoorSlide : MonoBehaviour
     [Tooltip("How fast the door moves.")]
     public float openSpeed = 2.0f;
 
+    [Header("Audio Settings")]
+    public AudioClip openSound; // Drag your door sound here
+
     private Vector3 initialPosition;
     private Vector3 targetPosition;
     private bool isOpen = false;
+    private AudioSource audioSource;
 
     void Start()
     {
+        // Get the AudioSource component
+        audioSource = GetComponent<AudioSource>();
+
         // Remember where the door started
         initialPosition = transform.position;
         // Calculate where it should end up (Current Y + Slide Height)
@@ -27,6 +35,12 @@ public class DoorSlide : MonoBehaviour
     {
         if (!isOpen)
         {
+            // Play the sound immediately when opening starts
+            if (audioSource != null && openSound != null)
+            {
+                audioSource.PlayOneShot(openSound);
+            }
+
             StartCoroutine(SlideRoutine());
         }
     }

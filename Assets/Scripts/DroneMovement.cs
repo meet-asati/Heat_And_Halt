@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(AudioSource))] // Added AudioSource requirement
 public class DroneMovement : MonoBehaviour
 {
     [Header("References")]
@@ -15,6 +16,10 @@ public class DroneMovement : MonoBehaviour
     public float beamRadius = 1.0f;
     public Transform crosshairVisual;
     public Transform laserOrigin;
+
+    [Header("Audio Settings")] // NEW SECTION
+    public AudioClip beamSound;
+    private AudioSource audioSource;
 
     [Header("Energy Settings")]
     [SerializeField] float maxBeamEnergy = 100f;
@@ -31,9 +36,9 @@ public class DroneMovement : MonoBehaviour
     [SerializeField] float sensitivityY = 0.5f;
 
     [Header("Limits")]
-    [SerializeField] float bodyMoveLimitX = 0.5f; // Keeps body on right
+    [SerializeField] float bodyMoveLimitX = 0.5f;
     [SerializeField] float bodyMoveLimitY = 1.0f;
-    [SerializeField] float aimLimitX = 5.0f;      // Allows aim to go left
+    [SerializeField] float aimLimitX = 5.0f;
     [SerializeField] float aimLimitY = 4.0f;
     [SerializeField] float aimDistance = 20f;
 
@@ -48,6 +53,13 @@ public class DroneMovement : MonoBehaviour
     void Start()
     {
         droneController = GetComponent<CharacterController>();
+        audioSource = GetComponent<AudioSource>(); // Get the AudioSource
+
+        // Configure Audio Source for continuous beam
+        audioSource.loop = true; 
+        audioSource.playOnAwake = false;
+        if (beamSound != null) audioSource.clip = beamSound;
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -61,66 +73,47 @@ public class DroneMovement : MonoBehaviour
         if (laserLine != null) laserLine.enabled = false;
     }
 
-    // 1. READ INPUT HERE
     void Update()
     {
         if (Mouse.current == null || robot == null) return;
 
-        // Collect Mouse Input
         Vector2 mouseDelta = Mouse.current.delta.ReadValue();
         mouseX += mouseDelta.x * sensitivityX * Time.deltaTime;
         mouseY += mouseDelta.y * sensitivityY * Time.deltaTime;
 
-        // Clamp Aim
         mouseX = Mathf.Clamp(mouseX, -aimLimitX, aimLimitX);
         mouseY = Mathf.Clamp(mouseY, -aimLimitY, aimLimitY);
 
-        // Calculate Aim Target for visual crosshair updates
         Vector3 aimLocalPos = new Vector3(mouseX, mouseY + 2.0f, aimDistance);
         Vector3 aimWorldPos = robot.TransformPoint(aimLocalPos);
 
         if (crosshairVisual != null) crosshairVisual.position = aimWorldPos;
 
-        // Combat Logic
         HandleCombat(aimWorldPos);
     }
 
-    // 2. MOVE DRONE HERE (Prevents Jitter)
     void LateUpdate()
     {
         if (robot == null) return;
 
-        // 1. POSITION LOGIC (Keep aiming independent of body pos)
         float droneX = Mathf.Clamp(mouseX, -bodyMoveLimitX, bodyMoveLimitX);
         float droneY = Mathf.Clamp(mouseY, -bodyMoveLimitY, bodyMoveLimitY);
 
         Vector3 droneLocalPos = baseOffset + new Vector3(droneX, droneY, 0);
         Vector3 droneWorldPos = robot.TransformPoint(droneLocalPos);
 
-        // Move Smoothly
         Vector3 nextPosition = Vector3.SmoothDamp(transform.position, droneWorldPos, ref currentVelocity, smoothTime);
         Vector3 movementDelta = nextPosition - transform.position;
         droneController.Move(movementDelta);
 
-        // 2. ROTATION LOGIC (Turret Aiming + 180 Correction)
-
-        // Recalculate aim target
         Vector3 aimLocalPos = new Vector3(mouseX, mouseY + 2.0f, aimDistance);
         Vector3 aimWorldPos = robot.TransformPoint(aimLocalPos);
-
-        // A. Find the direction to the crosshair
         Vector3 directionToTarget = aimWorldPos - transform.position;
 
-        // B. Calculate the rotation to look at that target
         if (directionToTarget != Vector3.zero)
         {
             Quaternion lookRotation = Quaternion.LookRotation(directionToTarget);
-
-            // C. Apply your 180-degree offset HERE
-            // This tells Unity: "Look at the target, then spin 180 degrees so the face is correct"
             Quaternion correctedRotation = lookRotation * Quaternion.Euler(0, 180, 0);
-
-            // D. Apply smoothly
             transform.rotation = Quaternion.Slerp(transform.rotation, correctedRotation, Time.deltaTime * 10f);
         }
     }
@@ -130,7 +123,10 @@ public class DroneMovement : MonoBehaviour
         bool isCooling = Mouse.current.leftButton.isPressed;
         bool isFreezing = Mouse.current.rightButton.isPressed;
 
-        if ((isCooling || isFreezing) && currentBeamEnergy > 0)
+        // CHECK: Is the beam actually firing? (Right Click + Has Energy)
+        bool isFiringBeam = isFreezing && currentBeamEnergy > 0;
+
+        if ((isCooling || isFiringBeam) && currentBeamEnergy > 0)
         {
             currentBeamEnergy -= beamDepletionRate * Time.deltaTime;
 
@@ -138,17 +134,34 @@ public class DroneMovement : MonoBehaviour
             {
                 if (robotMovement != null) robotMovement.ApplyCooling(coolingPower * Time.deltaTime);
                 if (laserLine != null) laserLine.enabled = false;
+                
+                // Stop audio if we switch to cooling (unless you want cooling audio too)
+                if (audioSource.isPlaying) audioSource.Stop(); 
             }
-            else if (isFreezing)
+            else if (isFiringBeam)
             {
                 FireFreezeBeam(targetPoint);
+
+                // AUDIO LOGIC: Play loop if not already playing
+                if (!audioSource.isPlaying && beamSound != null)
+                {
+                    audioSource.Play();
+                }
             }
         }
         else
         {
+            // RECHARGING / IDLE
             currentBeamEnergy += (maxBeamEnergy / rechargeDuration) * Time.deltaTime;
             if (laserLine != null) laserLine.enabled = false;
+
+            // AUDIO LOGIC: Stop sound if we release button OR run out of energy
+            if (audioSource.isPlaying)
+            {
+                audioSource.Stop();
+            }
         }
+        
         currentBeamEnergy = Mathf.Clamp(currentBeamEnergy, 0, maxBeamEnergy);
 
         if (HUDManager.Instance != null)
@@ -158,10 +171,7 @@ public class DroneMovement : MonoBehaviour
     void FireFreezeBeam(Vector3 targetPoint)
     {
         Vector3 startPos = laserOrigin.position;
-
-        // Calculate direction from that specific point to the target
         Vector3 direction = (targetPoint - startPos).normalized;
-
         Vector3 laserEndPoint = startPos + direction * freezeRange;
         bool foundTarget = false;
 
@@ -177,7 +187,7 @@ public class DroneMovement : MonoBehaviour
                 laserEndPoint = hit.point;
                 foundTarget = true;
                 if (laserLine != null) laserLine.startColor = Color.cyan;
-                break; // Stop raycast here
+                break; 
             }
 
             BossVent vent = hit.collider.GetComponent<BossVent>();
@@ -213,13 +223,10 @@ public class DroneMovement : MonoBehaviour
         if (laserLine != null)
         {
             laserLine.enabled = true;
-
-            // CHANGE 2: Laser starts at the new Fire Point
             laserLine.SetPosition(0, startPos);
             laserLine.SetPosition(1, laserEndPoint);
 
             if (!foundTarget) laserLine.startColor = Color.cyan;
-
         }
     }
 }
