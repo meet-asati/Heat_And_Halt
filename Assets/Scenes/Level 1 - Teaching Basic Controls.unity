@@ -318,8 +318,8 @@ MonoBehaviour:
   isIndestructible: 1
   lockedMessage: Power must be restored first!
   lockedMessageUI: {fileID: 1025178119}
-  hitSound: {fileID: 0}
-  destroySound: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: 531e31fcf1b53894d94097db4665ce6e, type: 3}
+  destroySound: {fileID: 8300000, guid: 531e31fcf1b53894d94097db4665ce6e, type: 3}
   OnDestroyed:
     m_PersistentCalls:
       m_Calls:
@@ -53223,8 +53223,8 @@ MonoBehaviour:
   isIndestructible: 0
   lockedMessage: Power must be restored first!
   lockedMessageUI: {fileID: 0}
-  hitSound: {fileID: 0}
-  destroySound: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: 531e31fcf1b53894d94097db4665ce6e, type: 3}
+  destroySound: {fileID: 8300000, guid: 531e31fcf1b53894d94097db4665ce6e, type: 3}
   OnDestroyed:
     m_PersistentCalls:
       m_Calls:
