@@ -18,17 +18,14 @@ public class DroneMovement : MonoBehaviour
     public Transform laserOrigin;
 
     [Header("--- VISUAL ENHANCEMENTS ---")] 
-    [Tooltip("Particle system at the drone's nozzle")]
     public ParticleSystem muzzleFlashParticles; 
-    [Tooltip("Particle system at the point where the beam hits")]
     public ParticleSystem impactParticles; 
-    [Tooltip("Light source at the impact point for glow")]
     public Light impactLight; 
     
     [Header("Beam Animation")]
-    public float textureScrollSpeed = 10f; // Speed of the beam flow
-    public float beamNoiseScale = 0.5f;    // How "jagged" the beam is
-    public int beamSegments = 20;          // Smoothness of the curve
+    public float textureScrollSpeed = 10f; 
+    public float beamNoiseScale = 0.5f;    
+    public int beamSegments = 20;          
 
     [Header("Audio Settings")]
     public AudioClip beamSound;
@@ -40,6 +37,9 @@ public class DroneMovement : MonoBehaviour
     [SerializeField] float beamDepletionRate = 20f;
     [SerializeField] float coolingPower = 25f;
     private float currentBeamEnergy;
+
+    // --- LOGIC VARIABLE ---
+    private bool requiresReset = false; // The "Latch" for the manual reset mechanic
 
     [Header("Position Settings")]
     [SerializeField] Vector3 baseOffset = new Vector3(1.5f, 2.5f, 0f);
@@ -72,6 +72,10 @@ public class DroneMovement : MonoBehaviour
         audioSource.playOnAwake = false;
         if (beamSound != null) audioSource.clip = beamSound;
 
+        // --- CHANGE HERE: START EMPTY ---
+        currentBeamEnergy = 0f; 
+        // The Update loop will automatically start filling it because you aren't pressing buttons yet.
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -83,7 +87,6 @@ public class DroneMovement : MonoBehaviour
             droneController.enabled = true;
         }
         
-        // Setup LineRenderer for animation
         if (laserLine != null)
         {
             laserLine.enabled = false;
@@ -91,10 +94,7 @@ public class DroneMovement : MonoBehaviour
             laserLine.useWorldSpace = true;
         }
 
-        // Initialize Visuals off
-        if (muzzleFlashParticles) muzzleFlashParticles.Stop();
-        if (impactParticles) impactParticles.Stop();
-        if (impactLight) impactLight.enabled = false;
+        DisableBeamVisuals();
     }
 
     void Update()
@@ -120,7 +120,6 @@ public class DroneMovement : MonoBehaviour
     {
         if (robot == null) return;
 
-        // Drone Movement Logic
         float droneX = Mathf.Clamp(mouseX, -bodyMoveLimitX, bodyMoveLimitX);
         float droneY = Mathf.Clamp(mouseY, -bodyMoveLimitY, bodyMoveLimitY);
 
@@ -131,7 +130,6 @@ public class DroneMovement : MonoBehaviour
         Vector3 movementDelta = nextPosition - transform.position;
         droneController.Move(movementDelta);
 
-        // Rotation Logic
         Vector3 aimLocalPos = new Vector3(mouseX, mouseY + 2.0f, aimDistance);
         Vector3 aimWorldPos = robot.TransformPoint(aimLocalPos);
         Vector3 directionToTarget = aimWorldPos - transform.position;
@@ -149,47 +147,57 @@ public class DroneMovement : MonoBehaviour
         bool isCoolingInput = Mouse.current.leftButton.isPressed;
         bool isFreezingInput = Mouse.current.rightButton.isPressed;
 
-        // Determine if we have enough energy to perform actions
-        bool hasEnergy = currentBeamEnergy > 0;
-        
-        // Prioritize Freeze Beam over Cooling if both buttons are pressed (or handle however you prefer)
-        // Here: Right Click = Freeze Beam, Left Click = Cool Robot
-        bool attemptingFreeze = isFreezingInput;
-        bool attemptingCool = isCoolingInput && !isFreezingInput; // Prevent doing both at once if you want strict priority
+        // =========================================================
+        // MANUAL RESET LOGIC
+        // =========================================================
 
-        if (attemptingFreeze && hasEnergy)
+        // 1. Check if we hit empty
+        if (currentBeamEnergy <= 0f)
+        {
+            requiresReset = true; // Lock the gun
+        }
+
+        // 2. Check for Release
+        // Unlock ONLY if player lets go of buttons
+        if (!isCoolingInput && !isFreezingInput)
+        {
+            requiresReset = false;
+        }
+
+        // 3. Permission to Fire
+        bool canFire = (currentBeamEnergy > 0f) && (!requiresReset);
+
+        // =========================================================
+
+        bool attemptingFreeze = isFreezingInput;
+        bool attemptingCool = isCoolingInput && !isFreezingInput; 
+
+        if (attemptingFreeze && canFire)
         {
             // --- STATE 1: FIRING FREEZE BEAM ---
             currentBeamEnergy -= beamDepletionRate * Time.deltaTime;
             FireFreezeBeam(targetPoint);
 
-            // Audio: Play Loop
             if (!audioSource.isPlaying && beamSound != null) audioSource.Play();
         }
-        else if (attemptingCool && hasEnergy)
+        else if (attemptingCool && canFire)
         {
             // --- STATE 2: COOLING ROBOT ---
             currentBeamEnergy -= beamDepletionRate * Time.deltaTime;
             
-            // Logic: Apply cooling to robot
             if (robotMovement != null) robotMovement.ApplyCooling(coolingPower * Time.deltaTime);
 
-            // Visuals: Turn off beam visuals while cooling
             DisableBeamVisuals();
-
-            // Audio: Stop beam sound (unless you add a specific cooling sound)
+            
             if (audioSource.isPlaying) audioSource.Stop();
         }
         else
         {
             // --- STATE 3: IDLE / RECHARGING ---
-            // We are neither freezing nor cooling, so we recharge.
+            // Recharges automatically when not firing or when locked
             currentBeamEnergy += (maxBeamEnergy / rechargeDuration) * Time.deltaTime;
 
-            // Visuals: Turn off
             DisableBeamVisuals();
-
-            // Audio: Stop
             if (audioSource.isPlaying) audioSource.Stop();
         }
 
@@ -212,23 +220,21 @@ public class DroneMovement : MonoBehaviour
         Vector3 startPos = laserOrigin.position;
         Vector3 direction = (targetPoint - startPos).normalized;
         Vector3 laserEndPoint = startPos + direction * freezeRange;
-        bool foundTarget = false;
-        Color beamColor = Color.cyan; // Default color
+        Color beamColor = Color.cyan; 
 
-        // Raycasting
         RaycastHit[] hits = Physics.SphereCastAll(startPos, beamRadius, direction, freezeRange, enemyLayer);
         System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
 
+        bool foundTarget = false;
+
         foreach (RaycastHit hit in hits)
         {
-            // Logic for hitting different objects
             DestroyableObject destObj = hit.collider.GetComponent<DestroyableObject>();
             if (destObj != null)
             {
                 destObj.Freeze();
                 laserEndPoint = hit.point;
                 foundTarget = true;
-                beamColor = Color.cyan;
                 break; 
             }
 
@@ -237,8 +243,8 @@ public class DroneMovement : MonoBehaviour
             {
                 vent.TakeLaserDamage(50f * Time.deltaTime);
                 laserEndPoint = hit.point;
+                beamColor = Color.red; 
                 foundTarget = true;
-                beamColor = Color.red; // Visual feedback for damage
                 break;
             }
 
@@ -248,7 +254,6 @@ public class DroneMovement : MonoBehaviour
                 boss.FreezeBoss();
                 laserEndPoint = hit.point;
                 foundTarget = true;
-                beamColor = Color.cyan;
             }
 
             DroneAI enemyDrone = hit.collider.GetComponent<DroneAI>();
@@ -262,7 +267,6 @@ public class DroneMovement : MonoBehaviour
             }
         }
 
-        // --- VISUAL UPDATE ---
         UpdateBeamVisuals(startPos, laserEndPoint, beamColor);
     }
 
@@ -274,17 +278,14 @@ public class DroneMovement : MonoBehaviour
         laserLine.startColor = color;
         laserLine.endColor = color;
 
-        // 1. Texture Scrolling
         laserLine.material.mainTextureOffset = new Vector2(Time.time * textureScrollSpeed, 0);
 
-        // 2. Muzzle Flash
         if (muzzleFlashParticles != null)
         {
             if (!muzzleFlashParticles.isPlaying) muzzleFlashParticles.Play();
             muzzleFlashParticles.transform.position = start;
         }
 
-        // 3. Impact Visuals
         if (impactParticles != null)
         {
             impactParticles.transform.position = end;
@@ -299,10 +300,7 @@ public class DroneMovement : MonoBehaviour
             impactLight.color = color;
         }
 
-        // 4. Jitter / Noise
-        float distance = Vector3.Distance(start, end);
         laserLine.positionCount = beamSegments;
-        
         for (int i = 0; i < beamSegments; i++)
         {
             float t = (float)i / (beamSegments - 1); 
@@ -313,7 +311,6 @@ public class DroneMovement : MonoBehaviour
                 Vector3 noise = Random.insideUnitSphere * beamNoiseScale;
                 pos += noise;
             }
-
             laserLine.SetPosition(i, pos);
         }
     }
